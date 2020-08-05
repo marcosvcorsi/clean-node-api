@@ -8,6 +8,11 @@
     "dev": "tsnd --transpile-only --respawn --ignore-watchs node_modules",
     "test": "jest"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
     "@commitlint/config-conventional": "^9.1.1",
