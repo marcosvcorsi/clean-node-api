@@ -16,4 +16,20 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new Error('Field name is required'));
   });
+
+  it('should return 400 if email was not provided', () => {
+    const sut = new SignUpController();
+    const httpRequest = {
+      body: {
+        name: 'anyname',
+        password: 'anypassword',
+        passwordConfirmation: 'anypassword',
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new Error('Field e-mail is required'));
+  });
 });
