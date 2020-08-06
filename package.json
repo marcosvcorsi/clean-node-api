@@ -6,12 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsnd --transpile-only --respawn --ignore-watchs node_modules",
-    "test": "jest"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+    "test": "jest --passWithNoTests"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",

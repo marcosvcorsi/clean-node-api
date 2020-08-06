@@ -1,12 +1,12 @@
 {
   "env": {
     "es2020": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
   "extends": [
     "airbnb-base",
-    "plugin:@typescript-eslint/recomended",
-    "prettier/@typescrit-eslint",
+    "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
