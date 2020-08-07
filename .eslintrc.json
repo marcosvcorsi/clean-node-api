@@ -19,6 +19,7 @@
     "prettier/prettier": "error",
     "class-methods-use-this": "off",
     "import/prefer-default-export": "off",
+    "no-restricted-syntax": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
