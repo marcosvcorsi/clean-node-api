@@ -1,4 +1,4 @@
-import AccountModel from '../models/Account';
+import { AccountModel } from '../models/Account';
 
 export interface CreateAccountModel {
   name: string;
@@ -6,6 +6,6 @@ export interface CreateAccountModel {
   password: string;
 }
 
-export default interface CreateAccount {
+export interface CreateAccount {
   create(account: CreateAccountModel): AccountModel;
 }
