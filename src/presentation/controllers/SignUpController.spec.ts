@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import SignUpController from './SignUpController';
-import EmailValidator from '../protocols/emailValidator';
+import { EmailValidator } from '../protocols';
 
 import { ServerError, InvalidParamError, MissingParamError } from '../errors';
 
