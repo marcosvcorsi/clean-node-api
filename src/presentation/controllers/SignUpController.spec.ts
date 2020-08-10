@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import SignUpController from './SignUpController';
-import MissingParamError from '../errors/MissingParamError';
-import InvalidParamError from '../errors/InvalidParamError';
 import EmailValidator from '../protocols/emailValidator';
-import ServerError from '../errors/ServerError';
+
+import { ServerError, InvalidParamError, MissingParamError } from '../errors';
 
 interface SutType {
   sut: SignUpController;
