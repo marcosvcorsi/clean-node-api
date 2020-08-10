@@ -6,7 +6,7 @@ import {
   CreateAccount,
 } from './SignUpProtocols';
 
-import { badRequest, serverError } from '../../helpers/httpHelper';
+import { badRequest, serverError, created } from '../../helpers/httpHelper';
 
 import { InvalidParamError, MissingParamError } from '../../errors';
 
@@ -51,10 +51,7 @@ export default class SignUpController implements Controller {
         password,
       });
 
-      return {
-        statusCode: 200,
-        body: account,
-      };
+      return created(account);
     } catch (err) {
       return serverError();
     }
