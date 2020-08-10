@@ -6,7 +6,13 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsnd --transpile-only --respawn --ignore-watchs node_modules",
-    "test": "jest --passWithNoTests"
+    "test": "jest --silent --noStackTrace --passWithNoTests --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "yarn test -- --watch -c jest-unit-config.js",
+    "test:integration": "yarn test -- --watch -c jest-integration-config.js ",
+    "test:watch": "yarn test -- --watch",
+    "test:staged": "yarn test -- --findRelatedTests",
+    "test:ci": "yarn test -- --coverage"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
