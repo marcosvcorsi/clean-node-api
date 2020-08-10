@@ -232,4 +232,26 @@ describe('SignUp Controller', () => {
       password: 'anypassword',
     });
   });
+
+  it('should return an server error if CreateAccount throws', () => {
+    const { sut, createAccountStub } = makeSut();
+
+    jest.spyOn(createAccountStub, 'create').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const httpRequest = {
+      body: {
+        name: 'anyname',
+        email: 'anyemail@mail.com',
+        password: 'anypassword',
+        passwordConfirmation: 'anypassword',
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError());
+  });
 });
