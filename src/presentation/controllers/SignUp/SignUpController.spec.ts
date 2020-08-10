@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import SignUpController from './SignUpController';
 
 import {
@@ -24,7 +22,7 @@ interface SutType {
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
-      return true;
+      return !!email;
     }
   }
 
@@ -34,14 +32,16 @@ const makeEmailValidator = (): EmailValidator => {
 const makeCreateAccount = (): CreateAccount => {
   class CreateAccountStub implements CreateAccount {
     create(account: CreateAccountModel): AccountModel {
-      const fakeAccount = {
+      const { name, email, password } = account;
+
+      const fakeCreateAccount = {
         id: 'id',
-        name: 'name',
-        email: 'email@mail.com',
-        password: 'password',
+        name,
+        email,
+        password,
       };
 
-      return fakeAccount;
+      return fakeCreateAccount;
     }
   }
 
