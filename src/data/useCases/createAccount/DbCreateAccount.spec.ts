@@ -28,7 +28,6 @@ const makeCreateAccountRepositoryStub = (): CreateAccountRepository => {
     async create(accountData: CreateAccountModel): Promise<AccountModel> {
       const fakeAccount = {
         ...accountData,
-        password: `hashed ${accountData.password}`,
         id: 'valid_id',
       };
 
@@ -115,5 +114,24 @@ describe('DbCreateAccount Use Case', () => {
     };
 
     await expect(sut.create(accountData)).rejects.toThrow();
+  });
+
+  it('should return an account on success', async () => {
+    const { sut } = makeSut();
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    const account = await sut.create(accountData);
+
+    expect(account).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'hashed valid_password',
+    });
   });
 });
