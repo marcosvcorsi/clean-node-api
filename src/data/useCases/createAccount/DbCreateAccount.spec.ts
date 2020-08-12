@@ -1,5 +1,6 @@
+import { Encrypter } from './DbCreateAccountProtocols';
+
 import DbCreateAccount from './DbCreateAccount';
-import Encrypter from '../../protocols/Encrypter';
 
 interface SutType {
   sut: DbCreateAccount;
