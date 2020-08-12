@@ -22,11 +22,11 @@ export default class DbCreateAccount implements CreateAccount {
   async create(accountData: CreateAccountModel): Promise<AccountModel> {
     const hashedPassword = await this.encrypter.encrypt(accountData.password);
 
-    await this.createAccountRepository.create({
+    const account = await this.createAccountRepository.create({
       ...accountData,
       password: hashedPassword,
     });
 
-    return Promise.resolve({ ...accountData, id: '1' });
+    return account;
   }
 }
