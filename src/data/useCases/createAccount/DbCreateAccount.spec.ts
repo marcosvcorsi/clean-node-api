@@ -100,4 +100,20 @@ describe('DbCreateAccount Use Case', () => {
       password: 'hashed valid_password',
     });
   });
+
+  it('should throw if DbCreateAccountRepository throws', async () => {
+    const { sut, createAccountRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(createAccountRepositoryStub, 'create')
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    await expect(sut.create(accountData)).rejects.toThrow();
+  });
 });
