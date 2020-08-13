@@ -11,11 +11,6 @@ export class AccountMongoRepository implements CreateAccountRepository {
 
     const [account] = result.ops;
 
-    const { _id: id, ...accountRest } = account;
-
-    return {
-      id,
-      ...accountRest,
-    };
+    return MongoHelper.map<AccountModel>(account);
   }
 }
