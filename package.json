@@ -5,7 +5,7 @@
   "author": "Marcos Corsi <marcosvcorsi@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "tsnd --transpile-only --respawn --ignore-watchs node_modules",
+    "start": "tsnd --transpile-only --respawn --ignore-watch node_modules src/main/server.ts",
     "test": "jest --silent --noStackTrace --passWithNoTests --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
@@ -19,6 +19,7 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@shelf/jest-mongodb": "^1.2.2",
     "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.7",
     "@types/jest": "^26.0.8",
     "@types/mongodb": "^3.5.25",
     "@types/node": "^14.0.27",
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
     "mongodb": "^3.6.0",
     "validator": "^13.1.1"
   }
