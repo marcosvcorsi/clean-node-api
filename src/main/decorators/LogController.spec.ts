@@ -50,4 +50,19 @@ describe('Log Controller Decorate', () => {
 
     expect(spyHandleController).toHaveBeenCalledWith(httpRequest);
   });
+
+  it('should return the same result of controller', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      body: {},
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      body: {},
+    });
+  });
 });
