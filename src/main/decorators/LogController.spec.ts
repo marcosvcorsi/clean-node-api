@@ -1,14 +1,29 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { LogControllerDecorator } from './LogController';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
 } from '../../presentation/protocols';
+import { serverError } from '../../presentation/helpers/httpHelper';
+import { LogErrorRepository } from '../../data/protocols/LogErrorRepository';
 
 interface SutType {
   sut: LogControllerDecorator;
   controllerStub: Controller;
+  logErrorRepositoryStub: LogErrorRepository;
 }
+
+const makeLogErrorRepository = (): LogErrorRepository => {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async log(stack: string): Promise<void> {
+      return Promise.resolve();
+    }
+  }
+
+  return new LogErrorRepositoryStub();
+};
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
@@ -27,12 +42,17 @@ const makeController = (): Controller => {
 
 const makeSut = (): SutType => {
   const controllerStub = makeController();
+  const logErrorRepositoryStub = makeLogErrorRepository();
 
-  const sut = new LogControllerDecorator(controllerStub);
+  const sut = new LogControllerDecorator(
+    controllerStub,
+    logErrorRepositoryStub,
+  );
 
   return {
     sut,
     controllerStub,
+    logErrorRepositoryStub,
   };
 };
 
@@ -64,5 +84,26 @@ describe('Log Controller Decorate', () => {
       statusCode: 200,
       body: {},
     });
+  });
+
+  it('should call LogErrorRepository with an error when controller throw ServerError', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut();
+
+    const fakeError = new Error();
+    fakeError.stack = 'anystack';
+
+    jest
+      .spyOn(controllerStub, 'handle')
+      .mockReturnValueOnce(Promise.resolve(serverError(fakeError)));
+
+    const logSpy = jest.spyOn(logErrorRepositoryStub, 'log');
+
+    const httpRequest = {
+      body: {},
+    };
+
+    await sut.handle(httpRequest);
+
+    expect(logSpy).toHaveBeenCalledWith('anystack');
   });
 });
