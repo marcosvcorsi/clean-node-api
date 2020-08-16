@@ -52,8 +52,8 @@ export default class SignUpController implements Controller {
       });
 
       return created(account);
-    } catch (err) {
-      return serverError();
+    } catch (error) {
+      return serverError(error);
     }
   }
 }
