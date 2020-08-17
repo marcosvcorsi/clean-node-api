@@ -19,3 +19,10 @@ export const created = (data): HttpResponse => {
     body: data,
   };
 };
+
+export const ok = (data): HttpResponse => {
+  return {
+    statusCode: 200,
+    body: data,
+  };
+};
