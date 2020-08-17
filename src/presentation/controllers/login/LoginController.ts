@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse } from '../../protocols';
-import { badRequest } from '../../helpers/httpHelper';
+import { badRequest, ok } from '../../helpers/httpHelper';
 import { MissingParamError } from '../../errors';
 
 export class LoginController implements Controller {
@@ -12,6 +12,6 @@ export class LoginController implements Controller {
       return badRequest(new MissingParamError('password'));
     }
 
-    return { statusCode: 200, body: {} };
+    return ok({});
   }
 }
