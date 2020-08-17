@@ -13,6 +13,7 @@ import {
   MissingParamError,
 } from '../../errors';
 import { HttpRequest } from '../../protocols';
+import { created, badRequest, serverError } from '../../helpers/httpHelper';
 
 interface SutType {
   sut: SignUpController;
@@ -86,8 +87,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('name'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
   });
 
   it('should return an error if email was not provided', async () => {
@@ -102,8 +102,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('email'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
   });
 
   it('should return an error if password was not provided', async () => {
@@ -118,8 +117,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('password'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('password')));
   });
 
   it('should return an error if password confirmation was not provided', async () => {
@@ -135,9 +133,8 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(
-      new MissingParamError('passwordConfirmation'),
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('passwordConfirmation')),
     );
   });
 
@@ -148,8 +145,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new InvalidParamError('email'));
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
   });
 
   it('should validate the email using EmailValidator', async () => {
@@ -171,8 +167,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError(''));
+    expect(httpResponse).toEqual(serverError(new ServerError('')));
   });
 
   it('should return an error with invalid password confirmation', async () => {
@@ -189,9 +184,8 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(
-      new InvalidParamError('passwordConfirmation'),
+    expect(httpResponse).toEqual(
+      badRequest(new InvalidParamError('passwordConfirmation')),
     );
   });
 
@@ -218,8 +212,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(makeFakeRequest());
 
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError(''));
+    expect(httpResponse).toEqual(serverError(new ServerError('')));
   });
 
   it('should be able to create a new account with valid data', async () => {
@@ -236,12 +229,13 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(201);
-    expect(httpResponse.body).toEqual({
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      password: 'valid_password',
-    });
+    expect(httpResponse).toEqual(
+      created({
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+      }),
+    );
   });
 });
