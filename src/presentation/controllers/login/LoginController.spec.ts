@@ -1,5 +1,9 @@
 import { LoginController } from './LoginController';
-import { badRequest, serverError } from '../../helpers/httpHelper';
+import {
+  badRequest,
+  serverError,
+  unauthorized,
+} from '../../helpers/httpHelper';
 import { MissingParamError, InvalidParamError } from '../../errors';
 import { EmailValidator, HttpRequest } from '../signup/SignUpProtocols';
 import { Authentication } from '../../../domain/useCases/Authentication';
@@ -119,5 +123,17 @@ describe('LoginController', () => {
     await sut.handle(makeFakeRequest());
 
     expect(authSpy).toHaveBeenCalledWith('anymail@mail.com', 'anypassword');
+  });
+
+  it('should return an error if invalid credentials were provided', async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockReturnValueOnce(Promise.resolve(null));
+
+    const httpReponse = await sut.handle(makeFakeRequest());
+
+    expect(httpReponse).toEqual(unauthorized());
   });
 });
