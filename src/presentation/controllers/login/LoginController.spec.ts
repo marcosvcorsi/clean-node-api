@@ -3,6 +3,7 @@ import {
   badRequest,
   serverError,
   unauthorized,
+  ok,
 } from '../../helpers/httpHelper';
 import { MissingParamError, InvalidParamError } from '../../errors';
 import { EmailValidator, HttpRequest, Authentication } from './LoginProtocols';
@@ -146,5 +147,14 @@ describe('LoginController', () => {
     const httpReponse = await sut.handle(makeFakeRequest());
 
     expect(httpReponse).toEqual(serverError(new Error()));
+  });
+
+  it('should be able to authenticate with valid credentials', async () => {
+    const { sut } = makeSut();
+    const httpReponse = await sut.handle(makeFakeRequest());
+
+    expect(httpReponse).toEqual(
+      ok({ accessToken: 'anymail@mail.com_anypassword' }),
+    );
   });
 });
