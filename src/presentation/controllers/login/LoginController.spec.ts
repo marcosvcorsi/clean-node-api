@@ -5,8 +5,7 @@ import {
   unauthorized,
 } from '../../helpers/httpHelper';
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { EmailValidator, HttpRequest } from '../signup/SignUpProtocols';
-import { Authentication } from '../../../domain/useCases/Authentication';
+import { EmailValidator, HttpRequest, Authentication } from './LoginProtocols';
 
 interface SutType {
   sut: LoginController;

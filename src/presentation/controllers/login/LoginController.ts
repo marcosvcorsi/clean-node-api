@@ -1,13 +1,18 @@
-import { Controller, HttpRequest, HttpResponse } from '../../protocols';
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  EmailValidator,
+  Authentication,
+} from './LoginProtocols';
 import {
   badRequest,
   ok,
   serverError,
   unauthorized,
 } from '../../helpers/httpHelper';
+
 import { MissingParamError, InvalidParamError } from '../../errors';
-import { EmailValidator } from '../signup/SignUpProtocols';
-import { Authentication } from '../../../domain/useCases/Authentication';
 
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator;
