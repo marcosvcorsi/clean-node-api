@@ -1,6 +1,6 @@
 import { LoginController } from './LoginController';
 import { badRequest } from '../../helpers/httpHelper';
-import { MissingParamError } from '../../errors';
+import { MissingParamError, InvalidParamError } from '../../errors';
 import { EmailValidator } from '../signup/SignUpProtocols';
 
 interface SutType {
@@ -72,5 +72,22 @@ describe('LoginController', () => {
     await sut.handle(httpRequest);
 
     expect(isValidSpy).toHaveBeenCalledWith('anymail@mail.com');
+  });
+
+  it('should return an error if email is invalid', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+
+    const httpRequest = {
+      body: {
+        email: 'invalid@mail.com',
+        password: 'anypassword',
+      },
+    };
+
+    const httpReponse = await sut.handle(httpRequest);
+
+    expect(httpReponse).toEqual(badRequest(new InvalidParamError('email')));
   });
 });
