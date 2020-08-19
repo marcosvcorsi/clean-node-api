@@ -6,6 +6,7 @@ import { AccountMongoRepository } from '../../infra/db/mongodb/repositories/acco
 import { LogControllerDecorator } from '../decorators/LogController';
 import { Controller } from '../../presentation/protocols';
 import { LogMongoRepository } from '../../infra/db/mongodb/repositories/log/LogRepository';
+import { makeSignUpValidation } from './signupValidation';
 
 export const makeSignUpController = (): Controller => {
   const emailValidator = new EmailValidatorAdapter();
@@ -20,7 +21,11 @@ export const makeSignUpController = (): Controller => {
     accountMongoRepository,
   );
 
-  const signUpController = new SignUpController(emailValidator, createAccount);
+  const signUpController = new SignUpController(
+    emailValidator,
+    createAccount,
+    makeSignUpValidation(),
+  );
 
   const logErrorRepository = new LogMongoRepository();
 
