@@ -5,6 +5,7 @@ import {
   CreateAccount,
   CreateAccountModel,
   AccountModel,
+  Validation,
 } from './SignUpProtocols';
 
 import {
@@ -19,6 +20,7 @@ interface SutType {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
   createAccountStub: CreateAccount;
+  validationStub: Validation;
 }
 
 const makeEmailValidator = (): EmailValidator => {
@@ -50,16 +52,32 @@ const makeCreateAccount = (): CreateAccount => {
   return new CreateAccountStub();
 };
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate(input: object): Error {
+      return input ? null : new Error();
+    }
+  }
+
+  return new ValidationStub();
+};
+
 const makeSut = (): SutType => {
   const emailValidatorStub = makeEmailValidator();
   const createAccountStub = makeCreateAccount();
+  const validationStub = makeValidation();
 
-  const sut = new SignUpController(emailValidatorStub, createAccountStub);
+  const sut = new SignUpController(
+    emailValidatorStub,
+    createAccountStub,
+    validationStub,
+  );
 
   return {
     sut,
     emailValidatorStub,
     createAccountStub,
+    validationStub,
   };
 };
 
@@ -237,5 +255,17 @@ describe('SignUp Controller', () => {
         password: 'valid_password',
       }),
     );
+  });
+
+  it('should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut();
+
+    const validateSpy = jest.spyOn(validationStub, 'validate');
+
+    const httpRequest = makeFakeRequest();
+
+    await sut.handle(httpRequest);
+
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
