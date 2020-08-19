@@ -4,6 +4,7 @@ import {
   Controller,
   EmailValidator,
   CreateAccount,
+  Validation,
 } from './SignUpProtocols';
 
 import { badRequest, serverError, created } from '../../helpers/httpHelper';
@@ -15,13 +16,22 @@ export default class SignUpController implements Controller {
 
   private readonly createAccount: CreateAccount;
 
-  constructor(emailValidator: EmailValidator, createAccount: CreateAccount) {
+  private readonly validation: Validation;
+
+  constructor(
+    emailValidator: EmailValidator,
+    createAccount: CreateAccount,
+    validation: Validation,
+  ) {
     this.emailValidator = emailValidator;
     this.createAccount = createAccount;
+    this.validation = validation;
   }
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      this.validation.validate(httpRequest.body);
+
       const requiredFields = [
         'name',
         'email',
