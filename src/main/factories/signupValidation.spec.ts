@@ -11,7 +11,14 @@ describe('SignUpValidation Test', () => {
 
     const validation: Validation[] = [];
 
-    for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
+    const requiredFields = [
+      'name',
+      'email',
+      'password',
+      'passwordConfirmation',
+    ];
+
+    for (const field of requiredFields) {
       validation.push(new RequiredFieldValidation(field));
     }
 
