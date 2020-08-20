@@ -53,4 +53,12 @@ describe('Validation Composite', () => {
 
     expect(error).toEqual(new Error());
   });
+
+  it('should return falsy if validation pass', () => {
+    const { sut } = makeSut();
+
+    const error = sut.validate({ field: 'anyvalue' });
+
+    expect(error).toBeFalsy();
+  });
 });
