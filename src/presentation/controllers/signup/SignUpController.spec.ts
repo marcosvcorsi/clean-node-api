@@ -9,7 +9,11 @@ import {
 
 import { ServerError, MissingParamError } from '../../errors';
 import { HttpRequest } from '../../protocols';
-import { created, badRequest, serverError } from '../../helpers/httpHelper';
+import {
+  created,
+  badRequest,
+  serverError,
+} from '../../helpers/http/httpHelper';
 
 interface SutType {
   sut: SignUpController;

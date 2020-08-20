@@ -4,7 +4,7 @@ import {
   serverError,
   unauthorized,
   ok,
-} from '../../helpers/httpHelper';
+} from '../../helpers/http/httpHelper';
 import { MissingParamError } from '../../errors';
 import { HttpRequest, Authentication, Validation } from './LoginProtocols';
 

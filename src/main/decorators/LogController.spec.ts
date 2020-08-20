@@ -6,7 +6,7 @@ import {
   HttpRequest,
   HttpResponse,
 } from '../../presentation/protocols';
-import { serverError } from '../../presentation/helpers/httpHelper';
+import { serverError } from '../../presentation/helpers/http/httpHelper';
 import { LogErrorRepository } from '../../data/protocols/LogErrorRepository';
 
 interface SutType {
