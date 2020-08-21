@@ -7,6 +7,7 @@ import {
 } from '../../helpers/http/httpHelper';
 import { MissingParamError } from '../../errors';
 import { HttpRequest, Authentication, Validation } from './LoginProtocols';
+import { AuthenticationModel } from '../../../domain/useCases/Authentication';
 
 interface SutType {
   sut: LoginController;
@@ -26,7 +27,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(email: string, password: string): Promise<string> {
+    async auth({ email, password }: AuthenticationModel): Promise<string> {
       return Promise.resolve(`${email}_${password}`);
     }
   }
@@ -62,7 +63,10 @@ describe('LoginController', () => {
 
     await sut.handle(makeFakeRequest());
 
-    expect(authSpy).toHaveBeenCalledWith('anymail@mail.com', 'anypassword');
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'anymail@mail.com',
+      password: 'anypassword',
+    });
   });
 
   it('should return an error if invalid credentials were provided', async () => {
