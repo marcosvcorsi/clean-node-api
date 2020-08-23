@@ -103,4 +103,14 @@ describe('DbAuthentication UseCase', () => {
       'hashed_password',
     );
   });
+
+  it('should throw if HashComparer throws', async () => {
+    const { sut, hashComparerStub } = makeSut();
+
+    jest
+      .spyOn(hashComparerStub, 'compare')
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    await expect(sut.auth(makeFakeAuth())).rejects.toThrow();
+  });
 });
