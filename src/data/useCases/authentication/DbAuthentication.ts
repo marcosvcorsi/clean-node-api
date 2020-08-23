@@ -28,15 +28,21 @@ export class DbAuthentication implements Authentication {
       authentication.email,
     );
 
-    if (account) {
-      await this.hashComparer.compare(
-        authentication.password,
-        account.password,
-      );
-
-      await this.tokenGenerator.generate(account.id);
+    if (!account) {
+      return null;
     }
 
-    return null;
+    const match = await this.hashComparer.compare(
+      authentication.password,
+      account.password,
+    );
+
+    if (!match) {
+      return null;
+    }
+
+    const accessToken = await this.tokenGenerator.generate(account.id);
+
+    return accessToken;
   }
 }
