@@ -2,11 +2,23 @@ import { AccountModel } from '../../../domain/models/Account';
 import { LoadAccountByEmailRepository } from '../../protocols/db/LoadAccountByEmailRepository';
 import { DbAuthentication } from './DbAuthentication';
 import { AuthenticationModel } from '../../../domain/useCases/Authentication';
+import { HashComparer } from '../../protocols/cryptography/HashComparer';
 
 interface SutType {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
+  hashComparerStub: HashComparer;
 }
+
+const makeHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare(value: string, hash: string): Promise<boolean> {
+      return Promise.resolve(!!value && !!hash);
+    }
+  }
+
+  return new HashComparerStub();
+};
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub
@@ -16,7 +28,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
         id: 'anyid',
         email,
         name: 'anyname',
-        password: 'anypassword',
+        password: 'hashed_password',
       };
 
       return Promise.resolve(account);
@@ -28,11 +40,16 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
 const makeSut = (): SutType => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub);
+  const hashComparerStub = makeHashComparer();
+  const sut = new DbAuthentication(
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub,
+  );
 
   return {
     sut,
     loadAccountByEmailRepositoryStub,
+    hashComparerStub,
   };
 };
 
@@ -72,5 +89,18 @@ describe('DbAuthentication UseCase', () => {
     const accessToken = await sut.auth(makeFakeAuth());
 
     expect(accessToken).toBeNull();
+  });
+
+  it('should call HashComparer with correct values', async () => {
+    const { sut, hashComparerStub } = makeSut();
+
+    const hashCompareSpy = jest.spyOn(hashComparerStub, 'compare');
+
+    await sut.auth(makeFakeAuth());
+
+    expect(hashCompareSpy).toHaveBeenCalledWith(
+      'anypassword',
+      'hashed_password',
+    );
   });
 });
