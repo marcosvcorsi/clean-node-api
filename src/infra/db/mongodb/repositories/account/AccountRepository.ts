@@ -1,4 +1,4 @@
-import { CreateAccountRepository } from '../../../../../data/protocols/CreateAccountRepository';
+import { CreateAccountRepository } from '../../../../../data/protocols/db/CreateAccountRepository';
 import { CreateAccountModel } from '../../../../../domain/useCases/CreateAccount';
 import { AccountModel } from '../../../../../domain/models/Account';
 import { MongoHelper } from '../../helpers/mongoHelper';

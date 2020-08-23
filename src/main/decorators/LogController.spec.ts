@@ -7,7 +7,7 @@ import {
   HttpResponse,
 } from '../../presentation/protocols';
 import { serverError } from '../../presentation/helpers/http/httpHelper';
-import { LogErrorRepository } from '../../data/protocols/LogErrorRepository';
+import { LogErrorRepository } from '../../data/protocols/db/LogErrorRepository';
 
 interface SutType {
   sut: LogControllerDecorator;
