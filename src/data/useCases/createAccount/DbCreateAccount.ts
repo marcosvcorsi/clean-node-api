@@ -1,5 +1,5 @@
 import {
-  Encrypter,
+  Hasher,
   CreateAccount,
   CreateAccountModel,
   AccountModel,
@@ -7,20 +7,20 @@ import {
 } from './DbCreateAccountProtocols';
 
 export default class DbCreateAccount implements CreateAccount {
-  private readonly encrypter: Encrypter;
+  private readonly hasher: Hasher;
 
   private readonly createAccountRepository: CreateAccountRepository;
 
   constructor(
-    encrypter: Encrypter,
+    hasher: Hasher,
     createAccountRepository: CreateAccountRepository,
   ) {
-    this.encrypter = encrypter;
+    this.hasher = hasher;
     this.createAccountRepository = createAccountRepository;
   }
 
   async create(accountData: CreateAccountModel): Promise<AccountModel> {
-    const hashedPassword = await this.encrypter.encrypt(accountData.password);
+    const hashedPassword = await this.hasher.hash(accountData.password);
 
     const account = await this.createAccountRepository.create({
       ...accountData,
