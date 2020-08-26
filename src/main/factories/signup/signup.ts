@@ -4,7 +4,7 @@ import { BcryptAdapter } from '../../../infra/cryptography/bcryptAdapter/BcryptA
 import { AccountMongoRepository } from '../../../infra/db/mongodb/repositories/account/AccountMongoRepository';
 import { LogControllerDecorator } from '../../decorators/LogController';
 import { Controller } from '../../../presentation/protocols';
-import { LogMongoRepository } from '../../../infra/db/mongodb/repositories/log/LogRepository';
+import { LogMongoRepository } from '../../../infra/db/mongodb/repositories/log/LogMongoRepository';
 import { makeSignUpValidation } from './signupValidation';
 
 export const makeSignUpController = (): Controller => {
