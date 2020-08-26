@@ -7,17 +7,10 @@ import {
 } from './DbCreateAccountProtocols';
 
 export default class DbCreateAccount implements CreateAccount {
-  private readonly hasher: Hasher;
-
-  private readonly createAccountRepository: CreateAccountRepository;
-
   constructor(
-    hasher: Hasher,
-    createAccountRepository: CreateAccountRepository,
-  ) {
-    this.hasher = hasher;
-    this.createAccountRepository = createAccountRepository;
-  }
+    private readonly hasher: Hasher,
+    private readonly createAccountRepository: CreateAccountRepository,
+  ) {}
 
   async create(accountData: CreateAccountModel): Promise<AccountModel> {
     const hashedPassword = await this.hasher.hash(accountData.password);

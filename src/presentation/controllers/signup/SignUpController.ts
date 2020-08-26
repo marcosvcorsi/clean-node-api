@@ -13,14 +13,10 @@ import {
 } from '../../helpers/http/httpHelper';
 
 export default class SignUpController implements Controller {
-  private readonly createAccount: CreateAccount;
-
-  private readonly validation: Validation;
-
-  constructor(createAccount: CreateAccount, validation: Validation) {
-    this.createAccount = createAccount;
-    this.validation = validation;
-  }
+  constructor(
+    private readonly createAccount: CreateAccount,
+    private readonly validation: Validation,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
