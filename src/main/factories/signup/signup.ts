@@ -2,7 +2,7 @@ import SignUpController from '../../../presentation/controllers/signup/SignUpCon
 import DbCreateAccount from '../../../data/useCases/createAccount/DbCreateAccount';
 import { BcryptAdapter } from '../../../infra/cryptography/bcryptAdapter/BcryptAdapter';
 import { AccountMongoRepository } from '../../../infra/db/mongodb/repositories/account/AccountMongoRepository';
-import { LogControllerDecorator } from '../../decorators/LogController';
+import { LogControllerDecorator } from '../../decorators/LogControllerDecorator';
 import { Controller } from '../../../presentation/protocols';
 import { LogMongoRepository } from '../../../infra/db/mongodb/repositories/log/LogMongoRepository';
 import { makeSignUpValidation } from './signupValidation';
