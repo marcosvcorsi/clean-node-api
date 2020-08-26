@@ -5,7 +5,7 @@ import { AccountMongoRepository } from '../../../infra/db/mongodb/repositories/a
 import { LogControllerDecorator } from '../../decorators/LogControllerDecorator';
 import { Controller } from '../../../presentation/protocols';
 import { LogMongoRepository } from '../../../infra/db/mongodb/repositories/log/LogMongoRepository';
-import { makeSignUpValidation } from './signupValidation';
+import { makeSignUpValidation } from './signupValidationFactory';
 
 export const makeSignUpController = (): Controller => {
   const salt = 12;
