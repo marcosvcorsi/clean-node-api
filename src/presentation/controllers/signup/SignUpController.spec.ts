@@ -5,7 +5,7 @@ import {
   CreateAccountModel,
   AccountModel,
   Validation,
-} from './SignUpProtocols';
+} from './SignUpControllerProtocols';
 
 import { ServerError, MissingParamError } from '../../errors';
 import { HttpRequest } from '../../protocols';

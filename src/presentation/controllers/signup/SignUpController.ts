@@ -4,7 +4,7 @@ import {
   Controller,
   CreateAccount,
   Validation,
-} from './SignUpProtocols';
+} from './SignUpControllerProtocols';
 
 import {
   badRequest,

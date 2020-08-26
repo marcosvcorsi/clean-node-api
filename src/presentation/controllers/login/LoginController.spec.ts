@@ -6,7 +6,11 @@ import {
   ok,
 } from '../../helpers/http/httpHelper';
 import { MissingParamError } from '../../errors';
-import { HttpRequest, Authentication, Validation } from './LoginProtocols';
+import {
+  HttpRequest,
+  Authentication,
+  Validation,
+} from './LoginControllerProtocols';
 import { AuthenticationModel } from '../../../domain/useCases/Authentication';
 
 interface SutType {
