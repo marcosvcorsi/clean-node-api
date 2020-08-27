@@ -3,7 +3,7 @@ import app from '../config/app';
 
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongoHelper';
 
-describe('SignUp Routes', () => {
+describe('Login Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
   });
@@ -18,15 +18,17 @@ describe('SignUp Routes', () => {
     await accountCollection.deleteMany({});
   });
 
-  it('should return an account on sucess', async () => {
-    await request(app)
-      .post('/api/signup')
-      .send({
-        name: 'anyname',
-        email: 'anymail@mail.com.br',
-        password: 'anypassword',
-        passwordConfirmation: 'anypassword',
-      })
-      .expect(201);
+  describe('POST /signup', () => {
+    it('should return an account on signup', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'anyname',
+          email: 'anymail@mail.com.br',
+          password: 'anypassword',
+          passwordConfirmation: 'anypassword',
+        })
+        .expect(201);
+    });
   });
 });
