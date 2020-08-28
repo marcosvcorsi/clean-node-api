@@ -54,5 +54,15 @@ describe('Login Routes', () => {
         })
         .expect(200);
     });
+
+    it('should return an error on login', async () => {
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'anymail@mail.com.br',
+          password: 'anypassword',
+        })
+        .expect(401);
+    });
   });
 });
