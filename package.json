@@ -5,7 +5,9 @@
   "author": "Marcos Corsi <marcosvcorsi@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "tsnd --transpile-only --respawn --ignore-watch node_modules src/main/server.ts",
+    "build": "rimraf dist && tsc",
+    "start": "node dist/main/server.js",
+    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/main/server.ts",
     "test": "jest --silent --noStackTrace --passWithNoTests --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
@@ -38,6 +40,7 @@
     "jest": "^26.2.2",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.4",
     "ts-node-dev": "^1.0.0-pre.56",
@@ -47,7 +50,6 @@
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "fast-glob": "^3.2.4",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.0",
     "validator": "^13.1.1"
