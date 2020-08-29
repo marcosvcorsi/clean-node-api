@@ -8,6 +8,7 @@
     "build": "rimraf dist && tsc",
     "start": "node dist/main/server.js",
     "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/main/server.ts",
+    "up": "yarn build && docker-compose up -d",
     "test": "jest --silent --noStackTrace --passWithNoTests --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
