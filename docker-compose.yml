@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo-container
+    image: mongo:3
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+  api:
+    container_name: api-container
+    build: .
+    image: clean-node-api
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - 3333:3333
+    volumes:
+      - ./dist:/usr/src/clean-node-api/dist
+    command: yarn start
+    environment:
+      MONGO_URL: 'mongodb://mongo:27017/clean-node-api'
+    links:
+      - mongo
+volumes:
+  mongodbdata:
