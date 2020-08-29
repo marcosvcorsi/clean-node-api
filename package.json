@@ -1,6 +1,6 @@
 {
   "name": "clean-node-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "index.js",
   "author": "Marcos Corsi <marcosvcorsi@gmail.com>",
   "license": "MIT",
