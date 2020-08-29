@@ -17,9 +17,11 @@ services:
       - mongo
     ports:
       - 3333:3333
+      - 9222:9222
     volumes:
       - ./dist:/usr/src/clean-node-api/dist
-    command: yarn start
+      - ./package.json:/usr/src/clean-node-api/package.json
+    command: yarn debug
     environment:
       MONGO_URL: 'mongodb://mongo:27017/clean-node-api'
     links:
