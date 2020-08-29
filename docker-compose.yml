@@ -10,8 +10,8 @@ services:
       - mongodbdata:/data/db
   api:
     container_name: api-container
-    build: .
-    image: clean-node-api
+    image: node:12
+    working_dir: /usr/src/clean-node-api
     restart: always
     depends_on:
       - mongo
@@ -21,7 +21,7 @@ services:
     volumes:
       - ./dist:/usr/src/clean-node-api/dist
       - ./package.json:/usr/src/clean-node-api/package.json
-    command: yarn debug
+    command: bash -c "yarn install --production && yarn debug"
     environment:
       MONGO_URL: 'mongodb://mongo:27017/clean-node-api'
     links:
