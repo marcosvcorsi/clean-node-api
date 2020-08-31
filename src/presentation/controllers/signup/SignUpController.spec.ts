@@ -9,12 +9,13 @@ import {
   AuthenticationModel,
 } from './SignUpControllerProtocols';
 
-import { ServerError, MissingParamError } from '../../errors';
+import { ServerError, MissingParamError, EmailInUseError } from '../../errors';
 import { HttpRequest } from '../../protocols';
 import {
   created,
   badRequest,
   serverError,
+  forbidden,
 } from '../../helpers/http/httpHelper';
 
 interface SutType {
@@ -135,6 +136,27 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse).toEqual(created({ accessToken: 'anytoken' }));
+  });
+
+  it('should throw an error if createAccount returns null', async () => {
+    const { sut, createAccountStub } = makeSut();
+
+    jest
+      .spyOn(createAccountStub, 'create')
+      .mockReturnValueOnce(Promise.resolve(null));
+
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
   });
 
   it('should call Validation with correct values', async () => {
