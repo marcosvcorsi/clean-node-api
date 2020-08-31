@@ -45,8 +45,8 @@ const makeCreateAccount = (): CreateAccount => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth({ email, password }: AuthenticationModel): Promise<string> {
-      return Promise.resolve(`${email}_${password}`);
+    async auth(data: AuthenticationModel): Promise<string> {
+      return Promise.resolve(data ? 'anytoken' : '');
     }
   }
 
@@ -134,14 +134,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse).toEqual(
-      created({
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'valid_email@mail.com',
-        password: 'valid_password',
-      }),
-    );
+    expect(httpResponse).toEqual(created({ accessToken: 'anytoken' }));
   });
 
   it('should call Validation with correct values', async () => {
