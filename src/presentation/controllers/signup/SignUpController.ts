@@ -4,6 +4,7 @@ import {
   Controller,
   CreateAccount,
   Validation,
+  Authentication,
 } from './SignUpControllerProtocols';
 
 import {
@@ -16,6 +17,7 @@ export default class SignUpController implements Controller {
   constructor(
     private readonly createAccount: CreateAccount,
     private readonly validation: Validation,
+    private readonly authentication: Authentication,
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -30,6 +32,11 @@ export default class SignUpController implements Controller {
 
       const account = await this.createAccount.create({
         name,
+        email,
+        password,
+      });
+
+      await this.authentication.auth({
         email,
         password,
       });
