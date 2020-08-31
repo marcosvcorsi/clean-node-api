@@ -5,6 +5,8 @@ import {
   CreateAccountModel,
   AccountModel,
   Validation,
+  Authentication,
+  AuthenticationModel,
 } from './SignUpControllerProtocols';
 
 import { ServerError, MissingParamError } from '../../errors';
@@ -19,6 +21,7 @@ interface SutType {
   sut: SignUpController;
   createAccountStub: CreateAccount;
   validationStub: Validation;
+  authenticationStub: Authentication;
 }
 
 const makeCreateAccount = (): CreateAccount => {
@@ -40,6 +43,16 @@ const makeCreateAccount = (): CreateAccount => {
   return new CreateAccountStub();
 };
 
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth({ email, password }: AuthenticationModel): Promise<string> {
+      return Promise.resolve(`${email}_${password}`);
+    }
+  }
+
+  return new AuthenticationStub();
+};
+
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
     validate(input: object): Error {
@@ -53,13 +66,19 @@ const makeValidation = (): Validation => {
 const makeSut = (): SutType => {
   const createAccountStub = makeCreateAccount();
   const validationStub = makeValidation();
+  const authenticationStub = makeAuthentication();
 
-  const sut = new SignUpController(createAccountStub, validationStub);
+  const sut = new SignUpController(
+    createAccountStub,
+    validationStub,
+    authenticationStub,
+  );
 
   return {
     sut,
     createAccountStub,
     validationStub,
+    authenticationStub,
   };
 };
 
@@ -147,5 +166,18 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest());
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('anyfield')));
+  });
+
+  it('should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    const authSpy = jest.spyOn(authenticationStub, 'auth');
+
+    await sut.handle(makeFakeRequest());
+
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'anyemail@mail.com',
+      password: 'anypassword',
+    });
   });
 });
