@@ -180,4 +180,16 @@ describe('SignUp Controller', () => {
       password: 'anypassword',
     });
   });
+
+  it('should return an error if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut();
+
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    const httpReponse = await sut.handle(makeFakeRequest());
+
+    expect(httpReponse).toEqual(serverError(new Error()));
+  });
 });
