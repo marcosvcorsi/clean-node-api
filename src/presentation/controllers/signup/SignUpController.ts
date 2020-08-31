@@ -11,7 +11,9 @@ import {
   badRequest,
   serverError,
   created,
+  forbidden,
 } from '../../helpers/http/httpHelper';
+import { EmailInUseError } from '../../errors';
 
 export default class SignUpController implements Controller {
   constructor(
@@ -30,11 +32,15 @@ export default class SignUpController implements Controller {
 
       const { name, email, password } = httpRequest.body;
 
-      await this.createAccount.create({
+      const account = await this.createAccount.create({
         name,
         email,
         password,
       });
+
+      if (!account) {
+        return forbidden(new EmailInUseError());
+      }
 
       const accessToken = await this.authentication.auth({
         email,
