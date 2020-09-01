@@ -15,15 +15,21 @@ export default class DbCreateAccount implements CreateAccount {
   ) {}
 
   async create(accountData: CreateAccountModel): Promise<AccountModel> {
-    await this.loadAccountByEmailRepository.loadByEmail(accountData.email);
+    const findAccount = await this.loadAccountByEmailRepository.loadByEmail(
+      accountData.email,
+    );
 
-    const hashedPassword = await this.hasher.hash(accountData.password);
+    if (!findAccount) {
+      const hashedPassword = await this.hasher.hash(accountData.password);
 
-    const account = await this.createAccountRepository.create({
-      ...accountData,
-      password: hashedPassword,
-    });
+      const account = await this.createAccountRepository.create({
+        ...accountData,
+        password: hashedPassword,
+      });
 
-    return account;
+      return account;
+    }
+
+    return null;
   }
 }
