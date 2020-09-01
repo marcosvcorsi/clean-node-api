@@ -9,5 +9,9 @@ export const makeDbCreateAccount = (): CreateAccount => {
 
   const accountMongoRepository = new AccountMongoRepository();
 
-  return new DbCreateAccount(bcrypAdapter, accountMongoRepository);
+  return new DbCreateAccount(
+    bcrypAdapter,
+    accountMongoRepository,
+    accountMongoRepository,
+  );
 };
