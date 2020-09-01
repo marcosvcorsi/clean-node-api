@@ -43,15 +43,8 @@ const makeCreateAccountRepositoryStub = (): CreateAccountRepository => {
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub
     implements LoadAccountByEmailRepository {
-    async loadByEmail(email: string): Promise<AccountModel> {
-      const account: AccountModel = {
-        id: 'anyid',
-        email,
-        name: 'anyname',
-        password: 'hashed_password',
-      };
-
-      return Promise.resolve(account);
+    async loadByEmail(): Promise<AccountModel> {
+      return Promise.resolve(null);
     }
   }
 
@@ -193,5 +186,30 @@ describe('DbCreateAccount Use Case', () => {
         password: 'valid_password',
       }),
     ).rejects.toThrow();
+  });
+
+  it('should return null with LoadAccountByEmailReposity finds one', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(
+        Promise.resolve({
+          id: 'valid_id',
+          name: 'valid_name',
+          email: 'valid_email@mail.com',
+          password: 'valid_password',
+        }),
+      );
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    const account = await sut.create(accountData);
+
+    expect(account).toBeNull();
   });
 });
