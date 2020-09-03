@@ -5,7 +5,7 @@ import {
   Validation,
   CreateSurvey,
 } from './CreateSurveyControllerProtocols';
-import { badRequest } from '../../../helpers/http/httpHelper';
+import { badRequest, serverError } from '../../../helpers/http/httpHelper';
 
 export class CreateSurveyController implements Controller {
   constructor(
@@ -14,19 +14,23 @@ export class CreateSurveyController implements Controller {
   ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const validationError = this.validation.validate(httpRequest.body);
+    try {
+      const validationError = this.validation.validate(httpRequest.body);
 
-    if (validationError) {
-      return Promise.resolve(badRequest(validationError));
+      if (validationError) {
+        return Promise.resolve(badRequest(validationError));
+      }
+
+      const { question, answers } = httpRequest.body;
+
+      await this.createSurvey.create({
+        question,
+        answers,
+      });
+
+      return null;
+    } catch (err) {
+      return serverError(err);
     }
-
-    const { question, answers } = httpRequest.body;
-
-    await this.createSurvey.create({
-      question,
-      answers,
-    });
-
-    return null;
   }
 }
