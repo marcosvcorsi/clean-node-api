@@ -10,7 +10,7 @@ import {
   ok,
   serverError,
   unauthorized,
-} from '../../helpers/http/httpHelper';
+} from '../../../helpers/http/httpHelper';
 
 export class LoginController implements Controller {
   constructor(
