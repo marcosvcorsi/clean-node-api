@@ -3,19 +3,30 @@ import {
   HttpRequest,
   HttpResponse,
   Validation,
+  CreateSurvey,
 } from './CreateSurveyControllerProtocols';
-import { ok, badRequest } from '../../../helpers/http/httpHelper';
+import { badRequest } from '../../../helpers/http/httpHelper';
 
 export class CreateSurveyController implements Controller {
-  constructor(private readonly validation: Validation) {}
+  constructor(
+    private readonly validation: Validation,
+    private readonly createSurvey: CreateSurvey,
+  ) {}
 
-  handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     const validationError = this.validation.validate(httpRequest.body);
 
     if (validationError) {
       return Promise.resolve(badRequest(validationError));
     }
 
-    return Promise.resolve(ok(httpRequest));
+    const { question, answers } = httpRequest.body;
+
+    await this.createSurvey.create({
+      question,
+      answers,
+    });
+
+    return null;
   }
 }
