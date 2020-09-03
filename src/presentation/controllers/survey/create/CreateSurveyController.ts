@@ -5,7 +5,11 @@ import {
   Validation,
   CreateSurvey,
 } from './CreateSurveyControllerProtocols';
-import { badRequest, serverError } from '../../../helpers/http/httpHelper';
+import {
+  badRequest,
+  serverError,
+  noContent,
+} from '../../../helpers/http/httpHelper';
 
 export class CreateSurveyController implements Controller {
   constructor(
@@ -28,7 +32,7 @@ export class CreateSurveyController implements Controller {
         answers,
       });
 
-      return null;
+      return noContent();
     } catch (err) {
       return serverError(err);
     }
