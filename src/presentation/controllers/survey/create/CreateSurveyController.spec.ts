@@ -5,7 +5,11 @@ import {
   CreateSurvey,
   Validation,
 } from './CreateSurveyControllerProtocols';
-import { badRequest, serverError } from '../../../helpers/http/httpHelper';
+import {
+  badRequest,
+  serverError,
+  noContent,
+} from '../../../helpers/http/httpHelper';
 
 const makeFakeRequest = (): HttpRequest => {
   return {
@@ -98,5 +102,15 @@ describe('Create Survey Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('should return noContent when create a survey', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = makeFakeRequest();
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse).toEqual(noContent());
   });
 });
