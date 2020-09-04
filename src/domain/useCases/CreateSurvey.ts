@@ -1,5 +1,5 @@
 export interface SurveyAnswer {
-  question: string;
+  answer: string;
   image?: string;
 }
 
