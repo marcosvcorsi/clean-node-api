@@ -48,4 +48,16 @@ describe('DbCreateSurvey UseCase', () => {
 
     expect(repositorySpy).toHaveBeenCalledWith(fakeSurvey);
   });
+
+  it('should throw an error if CreateSurveyRepository throws', async () => {
+    const { sut, createSurveyRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(createSurveyRepositoryStub, 'create')
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const fakeSurvey = makeFakeSurvey();
+
+    await expect(sut.create(fakeSurvey)).rejects.toThrow();
+  });
 });
