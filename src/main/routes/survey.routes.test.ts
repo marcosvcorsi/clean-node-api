@@ -21,10 +21,10 @@ describe('Survey Routes', () => {
     await surveyCollection.deleteMany({});
   });
 
-  describe('POST /survey', () => {
+  describe('POST /surveys', () => {
     it('should create survey on post', async () => {
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .send({
           question: 'Question 1',
           answers: [
