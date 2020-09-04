@@ -1,0 +1,51 @@
+import { DbCreateSurvey } from './DbCreateSurvey';
+import {
+  CreateSurveyRepository,
+  CreateSurveyModel,
+} from './DbCreateSurveyProtocols';
+
+const makeCreateSurveyRepository = () => {
+  class CreateSurveyRepositoryStub implements CreateSurveyRepository {
+    create(): Promise<void> {
+      return Promise.resolve();
+    }
+  }
+
+  return new CreateSurveyRepositoryStub();
+};
+
+interface SutType {
+  sut: DbCreateSurvey;
+  createSurveyRepositoryStub: CreateSurveyRepository;
+}
+
+const makeSut = (): SutType => {
+  const createSurveyRepositoryStub = makeCreateSurveyRepository();
+  const sut = new DbCreateSurvey(createSurveyRepositoryStub);
+
+  return { sut, createSurveyRepositoryStub };
+};
+
+const makeFakeSurvey = (): CreateSurveyModel => ({
+  question: 'anyquestion',
+  answers: [
+    {
+      image: 'anyimage',
+      answer: 'anyanswer',
+    },
+  ],
+});
+
+describe('DbCreateSurvey UseCase', () => {
+  it('should call CreateSurveyRepository with correct values', async () => {
+    const { sut, createSurveyRepositoryStub } = makeSut();
+
+    const repositorySpy = jest.spyOn(createSurveyRepositoryStub, 'create');
+
+    const fakeSurvey = makeFakeSurvey();
+
+    await sut.create(fakeSurvey);
+
+    expect(repositorySpy).toHaveBeenCalledWith(fakeSurvey);
+  });
+});
