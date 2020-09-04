@@ -11,7 +11,5 @@ export class DbCreateSurvey implements CreateSurvey {
 
   async create(data: CreateSurveyModel): Promise<void> {
     await this.createSurveyRepository.create(data);
-
-    return Promise.resolve();
   }
 }
