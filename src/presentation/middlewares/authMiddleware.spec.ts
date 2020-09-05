@@ -2,6 +2,7 @@ import { forbidden } from '../helpers/http/httpHelper';
 import { AccessDeniedError } from '../errors';
 import { AuthMiddleware } from './authMiddleware';
 import { LoadAccountByToken } from '../../domain/useCases/LoadAccountByToken';
+import { HttpRequest } from '../protocols';
 
 const makeLoadAccountByToken = () => {
   class LoadAccountByTokenStub implements LoadAccountByToken {
@@ -17,6 +18,12 @@ const makeLoadAccountByToken = () => {
 
   return new LoadAccountByTokenStub();
 };
+
+const makeFakeRequest = (): HttpRequest => ({
+  headers: {
+    Authorization: 'anytoken',
+  },
+});
 
 interface SutType {
   sut: AuthMiddleware;
@@ -45,11 +52,7 @@ describe('Auth Middleware', () => {
 
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load');
 
-    await sut.handle({
-      headers: {
-        Authorization: 'anytoken',
-      },
-    });
+    await sut.handle(makeFakeRequest());
 
     expect(loadSpy).toHaveBeenCalledWith('anytoken');
   });
