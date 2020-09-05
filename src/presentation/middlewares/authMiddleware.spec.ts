@@ -1,15 +1,34 @@
 import { forbidden } from '../helpers/http/httpHelper';
 import { AccessDeniedError } from '../errors';
 import { AuthMiddleware } from './authMiddleware';
+import { LoadAccountByToken } from '../../domain/useCases/LoadAccountByToken';
+
+const makeLoadAccountByToken = () => {
+  class LoadAccountByTokenStub implements LoadAccountByToken {
+    async load() {
+      return Promise.resolve({
+        id: 'anyid',
+        name: 'anyname',
+        email: 'anymail@mail.com',
+        password: 'anypassword',
+      });
+    }
+  }
+
+  return new LoadAccountByTokenStub();
+};
 
 interface SutType {
   sut: AuthMiddleware;
+  loadAccountByTokenStub: LoadAccountByToken;
 }
 
 const makeSut = (): SutType => {
-  const sut = new AuthMiddleware();
+  const loadAccountByTokenStub = makeLoadAccountByToken();
 
-  return { sut };
+  const sut = new AuthMiddleware(loadAccountByTokenStub);
+
+  return { sut, loadAccountByTokenStub };
 };
 
 describe('Auth Middleware', () => {
@@ -19,5 +38,19 @@ describe('Auth Middleware', () => {
     const response = await sut.handle({});
 
     expect(response).toEqual(forbidden(new AccessDeniedError()));
+  });
+
+  it('should call LoadAccountByToken with correct accessToken', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut();
+
+    const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load');
+
+    await sut.handle({
+      headers: {
+        Authorization: 'anytoken',
+      },
+    });
+
+    expect(loadSpy).toHaveBeenCalledWith('anytoken');
   });
 });
