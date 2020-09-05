@@ -1,4 +1,4 @@
-import { forbidden } from '../helpers/http/httpHelper';
+import { forbidden, ok } from '../helpers/http/httpHelper';
 import { AccessDeniedError } from '../errors';
 import { AuthMiddleware } from './authMiddleware';
 import { LoadAccountByToken } from '../../domain/useCases/LoadAccountByToken';
@@ -67,5 +67,13 @@ describe('Auth Middleware', () => {
     const response = await sut.handle(makeFakeRequest());
 
     expect(response).toEqual(forbidden(new AccessDeniedError()));
+  });
+
+  it('should return ok if no LoadAccountByToken exists', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(ok({ account_id: 'anyid' }));
   });
 });
