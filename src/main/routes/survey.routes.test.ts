@@ -22,7 +22,7 @@ describe('Survey Routes', () => {
   });
 
   describe('POST /surveys', () => {
-    it('should create survey on post', async () => {
+    it('should not create survey on post without Authorization', async () => {
       await request(app)
         .post('/api/surveys')
         .send({
@@ -32,7 +32,7 @@ describe('Survey Routes', () => {
             { answer: 'Answer 2' },
           ],
         })
-        .expect(204);
+        .expect(403);
     });
   });
 });
