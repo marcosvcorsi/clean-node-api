@@ -88,4 +88,17 @@ describe('DbLoadAccountByToken UseCase', () => {
 
     expect(response).toBeNull();
   });
+
+  it('should return an account on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.load('anytoken', 'anyrole');
+
+    expect(response).toEqual({
+      id: 'anyid',
+      name: 'anyname',
+      email: 'anymail@mail.com',
+      password: 'anypassword',
+    });
+  });
 });
