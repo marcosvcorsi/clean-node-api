@@ -20,7 +20,7 @@ const makeLoadAccountByToken = () => {
 
 const makeFakeRequest = (): HttpRequest => ({
   headers: {
-    Authorization: 'anytoken',
+    authorization: 'anytoken',
   },
 });
 

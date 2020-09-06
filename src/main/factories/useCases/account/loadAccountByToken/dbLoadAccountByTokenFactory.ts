@@ -3,8 +3,10 @@ import { DbLoadAccountByToken } from '../../../../../data/useCases/loadAccountBy
 import { AccountMongoRepository } from '../../../../../infra/db/mongodb/repositories/account/AccountMongoRepository';
 import { JwtAdapter } from '../../../../../infra/cryptography/jwtAdapter/JwtAdapter';
 
+import authConfig from '../../../../config/auth';
+
 export const makeDbLoadAccountByToken = (): LoadAccountByToken => {
-  const jwtAdapter = new JwtAdapter(process.env.JWT_SECRET);
+  const jwtAdapter = new JwtAdapter(authConfig.secret);
   const accountMongoRepository = new AccountMongoRepository();
 
   return new DbLoadAccountByToken(jwtAdapter, accountMongoRepository);

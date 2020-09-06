@@ -4,12 +4,14 @@ import { BcryptAdapter } from '../../../../../infra/cryptography/bcryptAdapter/B
 import { JwtAdapter } from '../../../../../infra/cryptography/jwtAdapter/JwtAdapter';
 import { DbAuthentication } from '../../../../../data/useCases/authentication/DbAuthentication';
 
+import authConfig from '../../../../config/auth';
+
 export const makeDbAuthentication = (): Authentication => {
   const salt = 12;
 
   const accountMongoRepository = new AccountMongoRepository();
   const bcryptAdaper = new BcryptAdapter(salt);
-  const jwtAdapter = new JwtAdapter(process.env.JWT_SECRET);
+  const jwtAdapter = new JwtAdapter(authConfig.secret);
 
   const dbAuthentication = new DbAuthentication(
     accountMongoRepository,
