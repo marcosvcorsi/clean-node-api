@@ -1,3 +1,4 @@
+import MockDate from 'mockdate';
 import { DbCreateSurvey } from './DbCreateSurvey';
 import {
   CreateSurveyRepository,
@@ -34,9 +35,18 @@ const makeFakeSurvey = (): CreateSurveyModel => ({
       answer: 'anyanswer',
     },
   ],
+  date: new Date(),
 });
 
 describe('DbCreateSurvey UseCase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call CreateSurveyRepository with correct values', async () => {
     const { sut, createSurveyRepositoryStub } = makeSut();
 
