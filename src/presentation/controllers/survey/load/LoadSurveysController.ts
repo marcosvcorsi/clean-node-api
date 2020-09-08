@@ -3,7 +3,7 @@ import {
   HttpResponse,
   LoadSurveys,
 } from './LoadSurveysControllerProtocols';
-import { ok, serverError } from '../../../helpers/http/httpHelper';
+import { ok, serverError, noContent } from '../../../helpers/http/httpHelper';
 
 export class LoadSurveysController implements Controller {
   constructor(private readonly loadSurveys: LoadSurveys) {}
@@ -11,6 +11,10 @@ export class LoadSurveysController implements Controller {
   async handle(): Promise<HttpResponse> {
     try {
       const surveys = await this.loadSurveys.load();
+
+      if (!surveys.length) {
+        return noContent();
+      }
 
       return ok(surveys);
     } catch (err) {
