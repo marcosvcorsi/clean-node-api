@@ -4,6 +4,10 @@ import { SurveyMongoRepository } from './SurveyMongoRepository';
 
 let surveyCollection: Collection;
 
+const makeSut = (): SurveyMongoRepository => {
+  return new SurveyMongoRepository();
+};
+
 describe('Survey MongoDB Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -19,24 +23,26 @@ describe('Survey MongoDB Repository', () => {
     await surveyCollection.deleteMany({});
   });
 
-  const makeSut = (): SurveyMongoRepository => {
-    return new SurveyMongoRepository();
-  };
+  describe('create()', () => {
+    it('should insert a new survey', async () => {
+      const sut = makeSut();
 
-  it('should insert a new survey', async () => {
-    const sut = makeSut();
+      await sut.create({
+        question: 'anyquestion',
+        answers: [
+          { answer: 'anyanswer', image: 'anyimage' },
+          { answer: 'otheranswer' },
+        ],
+        date: new Date(),
+      });
 
-    await sut.create({
-      question: 'anyquestion',
-      answers: [
-        { answer: 'anyanswer', image: 'anyimage' },
-        { answer: 'otheranswer' },
-      ],
-      date: new Date(),
+      const survey = await surveyCollection.findOne({
+        question: 'anyquestion',
+      });
+
+      expect(survey).toBeTruthy();
     });
-
-    const survey = await surveyCollection.findOne({ question: 'anyquestion' });
-
-    expect(survey).toBeTruthy();
   });
+
+  describe('loadAll()', () => {});
 });
