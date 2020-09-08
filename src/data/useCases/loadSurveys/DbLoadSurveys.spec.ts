@@ -1,3 +1,4 @@
+import MockDate from 'mockdate';
 import { SurveyModel } from '../../../domain/models/Survey';
 import { DbLoadSurveys } from './DbLoadSurveys';
 import { LoadSurveysRepository } from '../../protocols/db/survey/LoadSurveysRepository';
@@ -53,6 +54,14 @@ const makeSut = (): SutType => {
 };
 
 describe('DbLoadSurveys', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call LoadSurveysRepository', async () => {
     const { sut, loadSurveysRepositoryStub } = makeSut();
 
@@ -61,5 +70,13 @@ describe('DbLoadSurveys', () => {
     await sut.load();
 
     expect(repositorySpy).toHaveBeenCalled();
+  });
+
+  it('shoud return a list surveys on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.load();
+
+    expect(response).toEqual(makeFakeSurveys());
   });
 });
