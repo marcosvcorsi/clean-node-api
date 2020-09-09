@@ -75,4 +75,10 @@ describe('Survey Routes', () => {
         .expect(204);
     });
   });
+
+  describe('GET /surveys', () => {
+    it('should not list surveys on get without authorization', async () => {
+      await request(app).get('/api/surveys').expect(403);
+    });
+  });
 });
