@@ -80,5 +80,43 @@ describe('Survey Routes', () => {
     it('should not list surveys on get without authorization', async () => {
       await request(app).get('/api/surveys').expect(403);
     });
+
+    it('should list surveys with valid authorization', async () => {
+      const res = await accountCollection.insertOne({
+        name: 'anyname',
+        email: 'anymail@mail.com.br',
+        password: 'anypassword',
+      });
+
+      const [{ _id: id }] = res.ops;
+
+      const accessToken = await sign({ id }, authConfig.secret);
+
+      await accountCollection.updateOne(
+        { _id: id },
+        {
+          $set: {
+            accessToken,
+          },
+        },
+      );
+
+      await surveyCollection.insertMany([
+        {
+          question: 'anyquestion',
+          answers: [
+            {
+              image: 'anyimage',
+              answer: 'anyanswer',
+            },
+          ],
+        },
+      ]);
+
+      await request(app)
+        .get('/api/surveys')
+        .set('Authorization', accessToken)
+        .expect(200);
+    });
   });
 });
