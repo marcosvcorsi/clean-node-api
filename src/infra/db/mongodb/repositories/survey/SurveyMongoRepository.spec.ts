@@ -75,5 +75,13 @@ describe('Survey MongoDB Repository', () => {
       expect(surveys[0].question).toBe('anyquestion');
       expect(surveys[1].question).toBe('otherquestion');
     });
+
+    it('should load empty list', async () => {
+      const sut = makeSut();
+
+      const surveys = await sut.loadAll();
+
+      expect(surveys.length).toBe(0);
+    });
   });
 });
