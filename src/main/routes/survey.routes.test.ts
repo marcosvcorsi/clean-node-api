@@ -10,6 +10,30 @@ import authConfig from '../config/auth';
 let surveyCollection: Collection;
 let accountCollection: Collection;
 
+const makeAccessToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'anyname',
+    email: 'anymail@mail.com.br',
+    password: 'anypassword',
+    role: 'admin',
+  });
+
+  const [{ _id: id }] = res.ops;
+
+  const accessToken = await sign({ id }, authConfig.secret);
+
+  await accountCollection.updateOne(
+    { _id: id },
+    {
+      $set: {
+        accessToken,
+      },
+    },
+  );
+
+  return accessToken;
+};
+
 describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
@@ -42,25 +66,7 @@ describe('Survey Routes', () => {
     });
 
     it('should create survey on post with valid token', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anymail@mail.com.br',
-        password: 'anypassword',
-        role: 'admin',
-      });
-
-      const [{ _id: id }] = res.ops;
-
-      const accessToken = await sign({ id }, authConfig.secret);
-
-      await accountCollection.updateOne(
-        { _id: id },
-        {
-          $set: {
-            accessToken,
-          },
-        },
-      );
+      const accessToken = await makeAccessToken();
 
       await request(app)
         .post('/api/surveys')
@@ -82,41 +88,12 @@ describe('Survey Routes', () => {
     });
 
     it('should list surveys with valid authorization', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anymail@mail.com.br',
-        password: 'anypassword',
-      });
-
-      const [{ _id: id }] = res.ops;
-
-      const accessToken = await sign({ id }, authConfig.secret);
-
-      await accountCollection.updateOne(
-        { _id: id },
-        {
-          $set: {
-            accessToken,
-          },
-        },
-      );
-
-      await surveyCollection.insertMany([
-        {
-          question: 'anyquestion',
-          answers: [
-            {
-              image: 'anyimage',
-              answer: 'anyanswer',
-            },
-          ],
-        },
-      ]);
+      const accessToken = await makeAccessToken();
 
       await request(app)
         .get('/api/surveys')
         .set('Authorization', accessToken)
-        .expect(200);
+        .expect(204);
     });
   });
 });
