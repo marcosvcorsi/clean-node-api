@@ -42,13 +42,13 @@ const makeCreateSurvey = (): CreateSurvey => {
   return new CreateSurveyStub();
 };
 
-interface SutTypes {
+type SutType = {
   sut: Controller;
   validationStub: Validation;
   createSurveyStub: CreateSurvey;
-}
+};
 
-const makeSut = (): SutTypes => {
+const makeSut = (): SutType => {
   const validationStub = makeValidation();
   const createSurveyStub = makeCreateSurvey();
 

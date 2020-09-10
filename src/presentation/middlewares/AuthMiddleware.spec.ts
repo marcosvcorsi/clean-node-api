@@ -24,10 +24,10 @@ const makeFakeRequest = (): HttpRequest => ({
   },
 });
 
-interface SutType {
+type SutType = {
   sut: AuthMiddleware;
   loadAccountByTokenStub: LoadAccountByToken;
-}
+};
 
 const makeSut = (role?: string): SutType => {
   const loadAccountByTokenStub = makeLoadAccountByToken();

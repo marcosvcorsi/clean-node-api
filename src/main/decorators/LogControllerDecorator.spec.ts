@@ -7,11 +7,11 @@ import { serverError } from '@/presentation/helpers/http/httpHelper';
 import { LogErrorRepository } from '@/data/protocols/db/log/LogErrorRepository';
 import { LogControllerDecorator } from './LogControllerDecorator';
 
-interface SutType {
+type SutType = {
   sut: LogControllerDecorator;
   controllerStub: Controller;
   logErrorRepositoryStub: LogErrorRepository;
-}
+};
 
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {

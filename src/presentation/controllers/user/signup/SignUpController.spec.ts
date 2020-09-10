@@ -21,12 +21,12 @@ import {
   AuthenticationModel,
 } from './SignUpControllerProtocols';
 
-interface SutType {
+type SutType = {
   sut: SignUpController;
   createAccountStub: CreateAccount;
   validationStub: Validation;
   authenticationStub: Authentication;
-}
+};
 
 const makeCreateAccount = (): CreateAccount => {
   class CreateAccountStub implements CreateAccount {

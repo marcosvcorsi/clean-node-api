@@ -8,13 +8,13 @@ import {
   UpdateAccessTokenRepository,
 } from './DbAuthenticationProtocols';
 
-interface SutType {
+type SutType = {
   sut: DbAuthentication;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
   hashComparerStub: HashComparer;
   encrypterStub: Encrypter;
   updateAccessTokenRepositoryStub: UpdateAccessTokenRepository;
-}
+};
 
 const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
   class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {

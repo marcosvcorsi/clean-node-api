@@ -8,12 +8,12 @@ import {
 import DbCreateAccount from './DbCreateAccount';
 import { LoadAccountByEmailRepository } from '../authentication/DbAuthenticationProtocols';
 
-interface SutType {
+type SutType = {
   sut: DbCreateAccount;
   hasherStub: Hasher;
   createAccountRepositoryStub: CreateAccountRepository;
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
-}
+};
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {

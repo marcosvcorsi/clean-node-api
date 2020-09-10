@@ -29,11 +29,11 @@ const makeDecrypter = (): Decrypter => {
   return new DecrypterStub();
 };
 
-interface SutType {
+type SutType = {
   sut: DbLoadAccountByToken;
   decrypterStub: Decrypter;
   loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository;
-}
+};
 
 const makeSut = (): SutType => {
   const decrypterStub = makeDecrypter();
