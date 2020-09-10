@@ -1,6 +1,6 @@
-import { Controller } from '../../../../../presentation/protocols';
+import { Controller } from '@/presentation/protocols';
+import { CreateSurveyController } from '@/presentation/controllers/survey/create/CreateSurveyController';
 import { makeLogControllerDecorator } from '../../../decorators/logControllerDecoratorFactory';
-import { CreateSurveyController } from '../../../../../presentation/controllers/survey/create/CreateSurveyController';
 import { makeCreateSurveyValidation } from './createSurveyValidationFactory';
 import { makeDbCreateSurvey } from '../../../useCases/survey/createSurvey/dbCreateSurveyFactory';
 

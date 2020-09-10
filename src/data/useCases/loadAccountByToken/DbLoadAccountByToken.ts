@@ -1,5 +1,5 @@
-import { LoadAccountByToken } from '../../../domain/useCases/LoadAccountByToken';
-import { AccountModel } from '../../../domain/models/Account';
+import { LoadAccountByToken } from '@/domain/useCases/LoadAccountByToken';
+import { AccountModel } from '@/domain/models/Account';
 import { Decrypter } from '../../protocols/cryptography/Decrypter';
 import { LoadAccountByTokenRepository } from '../../protocols/db/account/LoadAccountByTokenRepository';
 

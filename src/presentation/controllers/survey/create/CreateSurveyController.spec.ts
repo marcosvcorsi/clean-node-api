@@ -1,4 +1,9 @@
 import MockDate from 'mockdate';
+import {
+  badRequest,
+  serverError,
+  noContent,
+} from '@/presentation/helpers/http/httpHelper';
 import { CreateSurveyController } from './CreateSurveyController';
 import {
   Controller,
@@ -6,11 +11,6 @@ import {
   CreateSurvey,
   Validation,
 } from './CreateSurveyControllerProtocols';
-import {
-  badRequest,
-  serverError,
-  noContent,
-} from '../../../helpers/http/httpHelper';
 
 const makeFakeRequest = (): HttpRequest => {
   return {

@@ -1,5 +1,5 @@
 import MockDate from 'mockdate';
-import { SurveyModel } from '../../../domain/models/Survey';
+import { SurveyModel } from '@/domain/models/Survey';
 import { DbLoadSurveys } from './DbLoadSurveys';
 import { LoadSurveysRepository } from '../../protocols/db/survey/LoadSurveysRepository';
 

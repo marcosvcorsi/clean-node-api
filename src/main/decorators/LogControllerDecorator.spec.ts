@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-import { LogControllerDecorator } from './LogControllerDecorator';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
-} from '../../presentation/protocols';
-import { serverError } from '../../presentation/helpers/http/httpHelper';
-import { LogErrorRepository } from '../../data/protocols/db/log/LogErrorRepository';
+} from '@/presentation/protocols';
+import { serverError } from '@/presentation/helpers/http/httpHelper';
+import { LogErrorRepository } from '@/data/protocols/db/log/LogErrorRepository';
+import { LogControllerDecorator } from './LogControllerDecorator';
 
 interface SutType {
   sut: LogControllerDecorator;
@@ -17,7 +15,7 @@ interface SutType {
 
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {
-    async logError(stack: string): Promise<void> {
+    async logError(): Promise<void> {
       return Promise.resolve();
     }
   }

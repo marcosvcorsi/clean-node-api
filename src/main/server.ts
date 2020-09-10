@@ -1,4 +1,6 @@
-import { MongoHelper } from '../infra/db/mongodb/helpers/mongoHelper';
+import 'module-alias/register';
+
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongoHelper';
 import database from './config/database';
 
 MongoHelper.connect(database.mongoUrl)
