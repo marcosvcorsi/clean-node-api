@@ -1,10 +1,18 @@
 import MockDate from 'mockdate';
 import { SurveyResultModel } from '@/domain/models/SurveyResult';
 import { SaveSurveyResultRepository } from '@/data/protocols/db/survey/SaveSurveyResultRepository';
+import { SaveSurveyResultModel } from '@/domain/useCases/SaveSurveyResult';
 import { DbSaveSurveyResult } from './DbSaveSurveyResult';
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
   id: 'anyid',
+  accountId: 'accountId',
+  answer: 'anyanswer',
+  date: new Date(),
+  surveyId: 'surveyId',
+});
+
+const makeFakeSurveyData = (): SaveSurveyResultModel => ({
   accountId: 'accountId',
   answer: 'anyanswer',
   date: new Date(),
@@ -47,7 +55,7 @@ describe('DbSaveSurveyResult Test', () => {
 
     const repositorySpy = jest.spyOn(saveSurveyResultRepositoryStub, 'save');
 
-    const fakeSurveyResult = makeFakeSurveyResult();
+    const fakeSurveyResult = makeFakeSurveyData();
 
     await sut.save(fakeSurveyResult);
 
@@ -61,6 +69,6 @@ describe('DbSaveSurveyResult Test', () => {
       .spyOn(saveSurveyResultRepositoryStub, 'save')
       .mockReturnValueOnce(Promise.reject(new Error()));
 
-    await expect(sut.save(makeFakeSurveyResult())).rejects.toThrow();
+    await expect(sut.save(makeFakeSurveyData())).rejects.toThrow();
   });
 });
