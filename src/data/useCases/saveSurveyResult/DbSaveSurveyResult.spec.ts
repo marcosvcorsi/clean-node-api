@@ -4,19 +4,16 @@ import { SaveSurveyResultRepository } from '@/data/protocols/db/survey/SaveSurve
 import { SaveSurveyResultModel } from '@/domain/useCases/SaveSurveyResult';
 import { DbSaveSurveyResult } from './DbSaveSurveyResult';
 
-const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: 'anyid',
+const makeFakeSurveyData = (): SaveSurveyResultModel => ({
   accountId: 'accountId',
   answer: 'anyanswer',
   date: new Date(),
   surveyId: 'surveyId',
 });
 
-const makeFakeSurveyData = (): SaveSurveyResultModel => ({
-  accountId: 'accountId',
-  answer: 'anyanswer',
-  date: new Date(),
-  surveyId: 'surveyId',
+const makeFakeSurveyResult = (): SurveyResultModel => ({
+  id: 'anyid',
+  ...makeFakeSurveyData(),
 });
 
 const makeSaveSurveyResultRepository = () => {
