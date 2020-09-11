@@ -1,7 +1,9 @@
-import { Decrypter } from '../../protocols/cryptography/Decrypter';
 import { DbLoadAccountByToken } from './DbLoadAccountByToken';
-import { AccountModel } from '../../../domain/models/Account';
-import { LoadAccountByTokenRepository } from '../../protocols/db/account/LoadAccountByTokenRepository';
+import {
+  LoadAccountByTokenRepository,
+  AccountModel,
+  Decrypter,
+} from './DbLoadAccountByTokenProtocols';
 
 const makeLoadAccountByRepository = () => {
   class LoadAccountByTokenRepositoryStub
