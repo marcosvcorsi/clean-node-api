@@ -1,9 +1,9 @@
 import {
+  SaveSurveyResultRepository,
+  SurveyResultModel,
   SaveSurveyResult,
   SaveSurveyResultModel,
-} from '@/domain/useCases/SaveSurveyResult';
-import { SurveyResultModel } from '@/domain/models/SurveyResult';
-import { SaveSurveyResultRepository } from '@/data/protocols/db/survey/SaveSurveyResultRepository';
+} from './DbSaveSurveyResultProtocols';
 
 export class DbSaveSurveyResult implements SaveSurveyResult {
   constructor(
