@@ -16,7 +16,7 @@ export class SurveyMongoRepository
 
     const surveys = await surveyCollection.find().toArray();
 
-    return surveys.map(survey => MongoHelper.map<SurveyModel>(survey));
+    return MongoHelper.mapCollection(surveys);
   }
 
   async create(surveyData: CreateSurveyModel): Promise<void> {
@@ -30,6 +30,6 @@ export class SurveyMongoRepository
 
     const survey = await surveyCollection.findOne({ _id: id });
 
-    return survey;
+    return MongoHelper.map(survey);
   }
 }

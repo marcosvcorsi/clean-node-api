@@ -34,4 +34,8 @@ export const MongoHelper = {
       ...collectionWithouId,
     };
   },
+
+  mapCollection<T>(collection: any[]): T[] {
+    return collection.map(item => MongoHelper.map<T>(item));
+  },
 };

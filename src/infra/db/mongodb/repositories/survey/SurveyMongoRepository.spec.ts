@@ -72,7 +72,9 @@ describe('Survey MongoDB Repository', () => {
       const surveys = await sut.loadAll();
 
       expect(surveys.length).toBe(2);
+      expect(surveys[0].id).toBeTruthy();
       expect(surveys[0].question).toBe('anyquestion');
+      expect(surveys[1].id).toBeTruthy();
       expect(surveys[1].question).toBe('otherquestion');
     });
 
@@ -101,9 +103,10 @@ describe('Survey MongoDB Repository', () => {
 
       const sut = makeSut();
 
-      const surveys = await sut.loadById(id);
+      const survey = await sut.loadById(id);
 
-      expect(surveys).toBeTruthy();
+      expect(survey).toBeTruthy();
+      expect(survey.id).toBeTruthy();
     });
   });
 });
