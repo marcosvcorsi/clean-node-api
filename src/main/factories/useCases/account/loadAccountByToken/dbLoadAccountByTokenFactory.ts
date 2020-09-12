@@ -1,5 +1,5 @@
-import { LoadAccountByToken } from '@/domain/useCases/LoadAccountByToken';
-import { DbLoadAccountByToken } from '@/data/useCases/loadAccountByToken/DbLoadAccountByToken';
+import { LoadAccountByToken } from '@/domain/useCases/account/LoadAccountByToken';
+import { DbLoadAccountByToken } from '@/data/useCases/account/loadAccountByToken/DbLoadAccountByToken';
 import { AccountMongoRepository } from '@/infra/db/mongodb/repositories/account/AccountMongoRepository';
 import { JwtAdapter } from '@/infra/cryptography/jwtAdapter/JwtAdapter';
 

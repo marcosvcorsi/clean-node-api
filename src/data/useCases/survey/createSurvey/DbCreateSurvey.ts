@@ -1,8 +1,8 @@
 import {
   CreateSurvey,
   CreateSurveyModel,
-} from '../../../domain/useCases/CreateSurvey';
-import { CreateSurveyRepository } from '../../protocols/db/survey/CreateSurveyRepository';
+} from '../../../../domain/useCases/survey/CreateSurvey';
+import { CreateSurveyRepository } from '../../../protocols/db/survey/CreateSurveyRepository';
 
 export class DbCreateSurvey implements CreateSurvey {
   constructor(

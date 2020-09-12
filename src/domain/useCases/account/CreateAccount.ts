@@ -1,4 +1,4 @@
-import { AccountModel } from '../models/Account';
+import { AccountModel } from '../../models/Account';
 
 export type CreateAccountModel = Omit<AccountModel, 'id'>;
 

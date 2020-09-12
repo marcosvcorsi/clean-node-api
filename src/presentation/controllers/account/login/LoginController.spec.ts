@@ -4,7 +4,7 @@ import {
   unauthorized,
   ok,
 } from '@/presentation/helpers/http/httpHelper';
-import { AuthenticationModel } from '@/domain/useCases/Authentication';
+import { AuthenticationModel } from '@/domain/useCases/account/Authentication';
 import { LoginController } from './LoginController';
 import { MissingParamError } from '../../../errors';
 import {

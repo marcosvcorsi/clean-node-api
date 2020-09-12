@@ -1,5 +1,5 @@
 import { CreateAccountRepository } from '@/data/protocols/db/account/CreateAccountRepository';
-import { CreateAccountModel } from '@/domain/useCases/CreateAccount';
+import { CreateAccountModel } from '@/domain/useCases/account/CreateAccount';
 import { AccountModel } from '@/domain/models/Account';
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/LoadAccountByEmailRepository';
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/UpdateAccessTokenRepository';
