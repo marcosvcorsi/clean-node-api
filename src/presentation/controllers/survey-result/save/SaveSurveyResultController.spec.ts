@@ -154,4 +154,16 @@ describe('SaveSurveyController Test', () => {
       answer: 'anyanswer',
     });
   });
+
+  it('should return serverError if SaveSurveyResult throws', async () => {
+    const { sut, saveSurveyResultStub } = makeSut();
+
+    jest
+      .spyOn(saveSurveyResultStub, 'save')
+      .mockReturnValueOnce(Promise.reject(new Error()));
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(serverError(new Error()));
+  });
 });
