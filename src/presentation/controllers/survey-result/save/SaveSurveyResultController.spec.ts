@@ -1,3 +1,5 @@
+import { forbidden } from '@/presentation/helpers/http/httpHelper';
+import { InvalidParamError } from '@/presentation/errors';
 import {
   SurveyModel,
   HttpRequest,
@@ -56,5 +58,17 @@ describe('SaveSurveyController Test', () => {
     await sut.handle(fakeRequest);
 
     expect(loadSpy).toHaveBeenCalledWith('anyid');
+  });
+
+  it('should return forbidden if LoadSurveyById return null', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+
+    jest
+      .spyOn(loadSurveyByIdStub, 'loadById')
+      .mockReturnValueOnce(Promise.resolve(null));
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 });
