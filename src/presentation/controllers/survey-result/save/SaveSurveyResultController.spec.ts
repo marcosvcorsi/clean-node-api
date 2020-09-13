@@ -1,5 +1,9 @@
 import MockDate from 'mockdate';
-import { forbidden, serverError } from '@/presentation/helpers/http/httpHelper';
+import {
+  forbidden,
+  serverError,
+  ok,
+} from '@/presentation/helpers/http/httpHelper';
 import { InvalidParamError } from '@/presentation/errors';
 import {
   SurveyModel,
@@ -165,5 +169,13 @@ describe('SaveSurveyController Test', () => {
     const response = await sut.handle(makeFakeRequest());
 
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  it('should return a survey result on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.handle(makeFakeRequest());
+
+    expect(response).toEqual(ok(makeFakeSurveyResult()));
   });
 });
