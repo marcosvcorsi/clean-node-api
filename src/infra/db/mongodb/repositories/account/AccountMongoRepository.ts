@@ -1,5 +1,5 @@
 import { CreateAccountRepository } from '@/data/protocols/db/account/CreateAccountRepository';
-import { CreateAccountModel } from '@/domain/useCases/account/CreateAccount';
+import { CreateAccountParams } from '@/domain/useCases/account/CreateAccount';
 import { AccountModel } from '@/domain/models/Account';
 import { LoadAccountByEmailRepository } from '@/data/protocols/db/account/LoadAccountByEmailRepository';
 import { UpdateAccessTokenRepository } from '@/data/protocols/db/account/UpdateAccessTokenRepository';
@@ -29,7 +29,7 @@ export class AccountMongoRepository
     return account ? MongoHelper.map<AccountModel>(account) : null;
   }
 
-  async create(accountData: CreateAccountModel): Promise<AccountModel> {
+  async create(accountData: CreateAccountParams): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts');
 
     const result = await accountCollection.insertOne(accountData);

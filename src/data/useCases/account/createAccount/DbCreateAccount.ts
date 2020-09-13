@@ -1,7 +1,7 @@
 import {
   Hasher,
   CreateAccount,
-  CreateAccountModel,
+  CreateAccountParams,
   AccountModel,
   CreateAccountRepository,
   LoadAccountByEmailRepository,
@@ -14,7 +14,7 @@ export default class DbCreateAccount implements CreateAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
   ) {}
 
-  async create(accountData: CreateAccountModel): Promise<AccountModel> {
+  async create(accountData: CreateAccountParams): Promise<AccountModel> {
     const findAccount = await this.loadAccountByEmailRepository.loadByEmail(
       accountData.email,
     );

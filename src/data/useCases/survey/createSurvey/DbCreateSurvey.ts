@@ -1,6 +1,6 @@
 import {
   CreateSurvey,
-  CreateSurveyModel,
+  CreateSurveyParams,
 } from '../../../../domain/useCases/survey/CreateSurvey';
 import { CreateSurveyRepository } from '../../../protocols/db/survey/CreateSurveyRepository';
 
@@ -9,7 +9,7 @@ export class DbCreateSurvey implements CreateSurvey {
     private readonly createSurveyRepository: CreateSurveyRepository,
   ) {}
 
-  async create(data: CreateSurveyModel): Promise<void> {
+  async create(data: CreateSurveyParams): Promise<void> {
     await this.createSurveyRepository.create(data);
   }
 }

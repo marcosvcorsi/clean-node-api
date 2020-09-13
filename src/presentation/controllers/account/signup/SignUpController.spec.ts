@@ -14,11 +14,11 @@ import SignUpController from './SignUpController';
 
 import {
   CreateAccount,
-  CreateAccountModel,
+  CreateAccountParams,
   AccountModel,
   Validation,
   Authentication,
-  AuthenticationModel,
+  AuthenticationParams,
 } from './SignUpControllerProtocols';
 
 type SutType = {
@@ -30,7 +30,7 @@ type SutType = {
 
 const makeCreateAccount = (): CreateAccount => {
   class CreateAccountStub implements CreateAccount {
-    async create(account: CreateAccountModel): Promise<AccountModel> {
+    async create(account: CreateAccountParams): Promise<AccountModel> {
       const { name, email, password } = account;
 
       const fakeCreateAccount = {
@@ -49,7 +49,7 @@ const makeCreateAccount = (): CreateAccount => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(data: AuthenticationModel): Promise<string> {
+    async auth(data: AuthenticationParams): Promise<string> {
       return Promise.resolve(data ? 'anytoken' : '');
     }
   }

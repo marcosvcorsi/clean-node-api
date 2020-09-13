@@ -4,7 +4,7 @@ import {
   unauthorized,
   ok,
 } from '@/presentation/helpers/http/httpHelper';
-import { AuthenticationModel } from '@/domain/useCases/account/Authentication';
+import { AuthenticationParams } from '@/domain/useCases/account/Authentication';
 import { LoginController } from './LoginController';
 import { MissingParamError } from '../../../errors';
 import {
@@ -31,7 +31,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth({ email, password }: AuthenticationModel): Promise<string> {
+    async auth({ email, password }: AuthenticationParams): Promise<string> {
       return Promise.resolve(`${email}_${password}`);
     }
   }

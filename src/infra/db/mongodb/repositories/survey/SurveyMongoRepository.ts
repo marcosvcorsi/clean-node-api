@@ -1,5 +1,5 @@
 import { CreateSurveyRepository } from '@/data/protocols/db/survey/CreateSurveyRepository';
-import { CreateSurveyModel } from '@/domain/useCases/survey/CreateSurvey';
+import { CreateSurveyParams } from '@/domain/useCases/survey/CreateSurvey';
 import { LoadSurveysRepository } from '@/data/protocols/db/survey/LoadSurveysRepository';
 import { SurveyModel } from '@/domain/models/Survey';
 
@@ -20,7 +20,7 @@ export class SurveyMongoRepository
     return MongoHelper.mapCollection(surveys);
   }
 
-  async create(surveyData: CreateSurveyModel): Promise<void> {
+  async create(surveyData: CreateSurveyParams): Promise<void> {
     const surveyCollection = await MongoHelper.getCollection('surveys');
 
     await surveyCollection.insertOne(surveyData);

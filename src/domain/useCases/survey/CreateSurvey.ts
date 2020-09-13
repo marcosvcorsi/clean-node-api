@@ -1,7 +1,7 @@
 import { SurveyModel } from '../../models/Survey';
 
-export type CreateSurveyModel = Omit<SurveyModel, 'id'>;
+export type CreateSurveyParams = Omit<SurveyModel, 'id'>;
 
 export interface CreateSurvey {
-  create(data: CreateSurveyModel): Promise<void>;
+  create(data: CreateSurveyParams): Promise<void>;
 }

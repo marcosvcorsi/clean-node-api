@@ -1,12 +1,12 @@
 import MockDate from 'mockdate';
 import {
   SaveSurveyResultRepository,
-  SaveSurveyResultModel,
+  SaveSurveyResultParams,
   SurveyResultModel,
 } from './DbSaveSurveyResultProtocols';
 import { DbSaveSurveyResult } from './DbSaveSurveyResult';
 
-const makeFakeSurveyData = (): SaveSurveyResultModel => ({
+const makeFakeSurveyData = (): SaveSurveyResultParams => ({
   accountId: 'accountId',
   answer: 'anyanswer',
   date: new Date(),

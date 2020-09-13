@@ -2,7 +2,7 @@ import MockDate from 'mockdate';
 import { DbCreateSurvey } from './DbCreateSurvey';
 import {
   CreateSurveyRepository,
-  CreateSurveyModel,
+  CreateSurveyParams,
 } from './DbCreateSurveyProtocols';
 
 const makeCreateSurveyRepository = () => {
@@ -27,7 +27,7 @@ const makeSut = (): SutType => {
   return { sut, createSurveyRepositoryStub };
 };
 
-const makeFakeSurvey = (): CreateSurveyModel => ({
+const makeFakeSurvey = (): CreateSurveyParams => ({
   question: 'anyquestion',
   answers: [
     {

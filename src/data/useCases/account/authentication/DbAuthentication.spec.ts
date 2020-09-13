@@ -2,7 +2,7 @@ import { DbAuthentication } from './DbAuthentication';
 import {
   AccountModel,
   LoadAccountByEmailRepository,
-  AuthenticationModel,
+  AuthenticationParams,
   HashComparer,
   Encrypter,
   UpdateAccessTokenRepository,
@@ -90,7 +90,7 @@ const makeSut = (): SutType => {
   };
 };
 
-const makeFakeAuth = (): AuthenticationModel => ({
+const makeFakeAuth = (): AuthenticationParams => ({
   email: 'anyemail@mail.com',
   password: 'anypassword',
 });

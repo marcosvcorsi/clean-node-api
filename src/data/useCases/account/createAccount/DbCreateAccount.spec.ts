@@ -1,6 +1,6 @@
 import {
   Hasher,
-  CreateAccountModel,
+  CreateAccountParams,
   CreateAccountRepository,
   AccountModel,
 } from './DbCreateAccountProtocols';
@@ -27,7 +27,7 @@ const makeHasher = (): Hasher => {
 
 const makeCreateAccountRepositoryStub = (): CreateAccountRepository => {
   class CreateAccountRepositoryStub implements CreateAccountRepository {
-    async create(accountData: CreateAccountModel): Promise<AccountModel> {
+    async create(accountData: CreateAccountParams): Promise<AccountModel> {
       const fakeAccount = {
         ...accountData,
         id: 'valid_id',
