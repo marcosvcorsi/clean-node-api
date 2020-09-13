@@ -74,7 +74,7 @@ describe('Auth Middleware', () => {
 
     const response = await sut.handle(makeFakeRequest());
 
-    expect(response).toEqual(ok({ account_id: 'anyid' }));
+    expect(response).toEqual(ok({ accountId: 'anyid' }));
   });
 
   it('should return serverError if no LoadAccountByToken throws', async () => {

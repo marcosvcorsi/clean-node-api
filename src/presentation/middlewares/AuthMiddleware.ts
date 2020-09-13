@@ -24,7 +24,7 @@ export class AuthMiddleware implements Middleware {
         );
 
         if (account) {
-          return ok({ account_id: account.id });
+          return ok({ accountId: account.id });
         }
       }
 
