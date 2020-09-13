@@ -11,7 +11,9 @@ const makeFakeRequest = (): HttpRequest => ({
   params: {
     surveyId: 'anyid',
   },
-  body: {},
+  body: {
+    answer: 'anyanswer',
+  },
 });
 
 const makeFakeSurvey = () => ({
@@ -82,5 +84,22 @@ describe('SaveSurveyController Test', () => {
     const response = await sut.handle(makeFakeRequest());
 
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  it('should return forbidden if an invalid answer is provided', async () => {
+    const { sut } = makeSut();
+
+    const invalidAnswerRequest = {
+      params: {
+        surveyId: 'anyid',
+      },
+      body: {
+        answer: 'invalid_answer',
+      },
+    };
+
+    const response = await sut.handle(invalidAnswerRequest);
+
+    expect(response).toEqual(forbidden(new InvalidParamError('answer')));
   });
 });
