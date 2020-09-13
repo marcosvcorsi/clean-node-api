@@ -1,3 +1,4 @@
+import { mockCreateAccountParams } from '@/domain/test';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '../../helpers/mongoHelper';
 import { AccountMongoRepository } from './AccountMongoRepository';
@@ -27,16 +28,12 @@ describe('Account MongoDB Repository', () => {
     it('should return an account on add success', async () => {
       const sut = makeSut();
 
-      const account = await sut.create({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
-      });
+      const account = await sut.create(mockCreateAccountParams());
 
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe('anyname');
-      expect(account.email).toBe('anyemail@mail.com');
+      expect(account.email).toBe('anymail@mail.com');
       expect(account.password).toBe('anypassword');
     });
   });
@@ -45,18 +42,14 @@ describe('Account MongoDB Repository', () => {
     it('should return an account on loadByEmail success', async () => {
       const sut = makeSut();
 
-      await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
-      });
+      await accountCollection.insertOne(mockCreateAccountParams());
 
-      const account = await sut.loadByEmail('anyemail@mail.com');
+      const account = await sut.loadByEmail('anymail@mail.com');
 
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe('anyname');
-      expect(account.email).toBe('anyemail@mail.com');
+      expect(account.email).toBe('anymail@mail.com');
       expect(account.password).toBe('anypassword');
     });
 
@@ -73,11 +66,7 @@ describe('Account MongoDB Repository', () => {
     it('should update account access token', async () => {
       const sut = makeSut();
 
-      const data = await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
-      });
+      const data = await accountCollection.insertOne(mockCreateAccountParams());
 
       const [{ _id: id, accessToken }] = data.ops;
 
@@ -97,9 +86,7 @@ describe('Account MongoDB Repository', () => {
       const sut = makeSut();
 
       await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
+        ...mockCreateAccountParams(),
         accessToken: 'anytoken',
       });
 
@@ -108,7 +95,7 @@ describe('Account MongoDB Repository', () => {
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe('anyname');
-      expect(account.email).toBe('anyemail@mail.com');
+      expect(account.email).toBe('anymail@mail.com');
       expect(account.password).toBe('anypassword');
     });
 
@@ -116,9 +103,7 @@ describe('Account MongoDB Repository', () => {
       const sut = makeSut();
 
       await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
+        ...mockCreateAccountParams(),
         accessToken: 'anytoken',
         role: 'admin',
       });
@@ -128,7 +113,7 @@ describe('Account MongoDB Repository', () => {
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
       expect(account.name).toBe('anyname');
-      expect(account.email).toBe('anyemail@mail.com');
+      expect(account.email).toBe('anymail@mail.com');
       expect(account.password).toBe('anypassword');
     });
 
@@ -136,9 +121,7 @@ describe('Account MongoDB Repository', () => {
       const sut = makeSut();
 
       await accountCollection.insertOne({
-        name: 'anyname',
-        email: 'anyemail@mail.com',
-        password: 'anypassword',
+        ...mockCreateAccountParams(),
         accessToken: 'anytoken',
       });
 

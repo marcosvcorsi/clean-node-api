@@ -4,7 +4,7 @@ import {
   unauthorized,
   ok,
 } from '@/presentation/helpers/http/httpHelper';
-import { AuthenticationParams } from '@/domain/useCases/account/Authentication';
+import { mockAuthentication, mockValidation } from '@/presentation/test';
 import { LoginController } from './LoginController';
 import { MissingParamError } from '../../../errors';
 import {
@@ -19,29 +19,9 @@ type SutType = {
   validationStub: Validation;
 };
 
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate(input: object): Error {
-      return input ? null : new Error();
-    }
-  }
-
-  return new ValidationStub();
-};
-
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth({ email, password }: AuthenticationParams): Promise<string> {
-      return Promise.resolve(`${email}_${password}`);
-    }
-  }
-
-  return new AuthenticationStub();
-};
-
 const makeSut = (): SutType => {
-  const authenticationStub = makeAuthentication();
-  const validationStub = makeValidation();
+  const authenticationStub = mockAuthentication();
+  const validationStub = mockValidation();
 
   const sut = new LoginController(authenticationStub, validationStub);
 
@@ -52,7 +32,7 @@ const makeSut = (): SutType => {
   };
 };
 
-const makeFakeRequest = (): HttpRequest => ({
+const mockRequest = (): HttpRequest => ({
   body: {
     email: 'anymail@mail.com',
     password: 'anypassword',
@@ -65,7 +45,7 @@ describe('LoginController', () => {
 
     const authSpy = jest.spyOn(authenticationStub, 'auth');
 
-    await sut.handle(makeFakeRequest());
+    await sut.handle(mockRequest());
 
     expect(authSpy).toHaveBeenCalledWith({
       email: 'anymail@mail.com',
@@ -80,7 +60,7 @@ describe('LoginController', () => {
       .spyOn(authenticationStub, 'auth')
       .mockReturnValueOnce(Promise.resolve(null));
 
-    const httpReponse = await sut.handle(makeFakeRequest());
+    const httpReponse = await sut.handle(mockRequest());
 
     expect(httpReponse).toEqual(unauthorized());
   });
@@ -92,18 +72,16 @@ describe('LoginController', () => {
       throw new Error();
     });
 
-    const httpReponse = await sut.handle(makeFakeRequest());
+    const httpReponse = await sut.handle(mockRequest());
 
     expect(httpReponse).toEqual(serverError(new Error()));
   });
 
   it('should be able to authenticate with valid credentials', async () => {
     const { sut } = makeSut();
-    const httpReponse = await sut.handle(makeFakeRequest());
+    const httpReponse = await sut.handle(mockRequest());
 
-    expect(httpReponse).toEqual(
-      ok({ accessToken: 'anymail@mail.com_anypassword' }),
-    );
+    expect(httpReponse).toEqual(ok({ accessToken: 'anytoken' }));
   });
 
   it('should call Validation with correct values', async () => {
@@ -111,7 +89,7 @@ describe('LoginController', () => {
 
     const validateSpy = jest.spyOn(validationStub, 'validate');
 
-    const httpRequest = makeFakeRequest();
+    const httpRequest = mockRequest();
 
     await sut.handle(httpRequest);
 
@@ -125,7 +103,7 @@ describe('LoginController', () => {
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingParamError('anyfield'));
 
-    const httpResponse = await sut.handle(makeFakeRequest());
+    const httpResponse = await sut.handle(mockRequest());
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('anyfield')));
   });

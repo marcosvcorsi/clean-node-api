@@ -1,3 +1,4 @@
+import { mockCreateSurveyParams } from '@/domain/test';
 import { Collection } from 'mongodb';
 import { MongoHelper } from '../../helpers/mongoHelper';
 import { SurveyMongoRepository } from './SurveyMongoRepository';
@@ -27,14 +28,7 @@ describe('Survey MongoDB Repository', () => {
     it('should insert a new survey', async () => {
       const sut = makeSut();
 
-      await sut.create({
-        question: 'anyquestion',
-        answers: [
-          { answer: 'anyanswer', image: 'anyimage' },
-          { answer: 'otheranswer' },
-        ],
-        date: new Date(),
-      });
+      await sut.create(mockCreateSurveyParams());
 
       const survey = await surveyCollection.findOne({
         question: 'anyquestion',

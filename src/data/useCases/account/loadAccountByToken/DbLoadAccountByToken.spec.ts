@@ -1,35 +1,10 @@
+import { mockDecrypter, mockLoadAccountByTokenRepository } from '@/data/test';
+import { mockAccountModel, throwError } from '@/domain/test';
 import { DbLoadAccountByToken } from './DbLoadAccountByToken';
 import {
   LoadAccountByTokenRepository,
-  AccountModel,
   Decrypter,
 } from './DbLoadAccountByTokenProtocols';
-
-const makeLoadAccountByRepository = () => {
-  class LoadAccountByTokenRepositoryStub
-    implements LoadAccountByTokenRepository {
-    async loadByToken(): Promise<AccountModel> {
-      return {
-        id: 'anyid',
-        name: 'anyname',
-        email: 'anymail@mail.com',
-        password: 'anypassword',
-      };
-    }
-  }
-
-  return new LoadAccountByTokenRepositoryStub();
-};
-
-const makeDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt() {
-      return 'anyvalue';
-    }
-  }
-
-  return new DecrypterStub();
-};
 
 type SutType = {
   sut: DbLoadAccountByToken;
@@ -38,8 +13,8 @@ type SutType = {
 };
 
 const makeSut = (): SutType => {
-  const decrypterStub = makeDecrypter();
-  const loadAccountByTokenRepositoryStub = makeLoadAccountByRepository();
+  const decrypterStub = mockDecrypter();
+  const loadAccountByTokenRepositoryStub = mockLoadAccountByTokenRepository();
   const sut = new DbLoadAccountByToken(
     decrypterStub,
     loadAccountByTokenRepositoryStub,
@@ -72,9 +47,7 @@ describe('DbLoadAccountByToken UseCase', () => {
   it('should throw if Decrypter throws', async () => {
     const { sut, decrypterStub } = makeSut();
 
-    jest
-      .spyOn(decrypterStub, 'decrypt')
-      .mockReturnValueOnce(Promise.reject(new Error()));
+    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(throwError);
 
     await expect(sut.load('anytoken', 'anyrole')).rejects.toThrow();
   });
@@ -106,7 +79,7 @@ describe('DbLoadAccountByToken UseCase', () => {
 
     jest
       .spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
-      .mockReturnValueOnce(Promise.reject(new Error()));
+      .mockImplementationOnce(throwError);
 
     await expect(sut.load('anytoken', 'anyrole')).rejects.toThrow();
   });
@@ -116,11 +89,6 @@ describe('DbLoadAccountByToken UseCase', () => {
 
     const response = await sut.load('anytoken', 'anyrole');
 
-    expect(response).toEqual({
-      id: 'anyid',
-      name: 'anyname',
-      email: 'anymail@mail.com',
-      password: 'anypassword',
-    });
+    expect(response).toEqual(mockAccountModel());
   });
 });

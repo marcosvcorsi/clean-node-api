@@ -1,30 +1,8 @@
 import MockDate from 'mockdate';
-import {
-  LoadSurveyByIdRepository,
-  SurveyModel,
-} from './DbLoadSurveyByIdProtocols';
+import { mockSurveyModel, throwError } from '@/domain/test';
+import { mockLoadSurveyByIdRepository } from '@/data/test';
+import { LoadSurveyByIdRepository } from './DbLoadSurveyByIdProtocols';
 import { DbLoadSurveyById } from './DbLoadSurveyById';
-
-const makeFakeSurvey = () => ({
-  id: 'anyid',
-  question: 'anyquestion',
-  date: new Date(),
-  answers: [
-    {
-      answer: 'anyanswer',
-    },
-  ],
-});
-
-const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
-  class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
-    async loadById(): Promise<SurveyModel> {
-      return makeFakeSurvey();
-    }
-  }
-
-  return new LoadSurveyByIdRepositoryStub();
-};
 
 type SutType = {
   sut: DbLoadSurveyById;
@@ -32,7 +10,7 @@ type SutType = {
 };
 
 const makeSut = (): SutType => {
-  const loadSurveyByIdRepositoryStub = makeLoadSurveyByIdRepository();
+  const loadSurveyByIdRepositoryStub = mockLoadSurveyByIdRepository();
   const sut = new DbLoadSurveyById(loadSurveyByIdRepositoryStub);
 
   return { sut, loadSurveyByIdRepositoryStub };
@@ -74,7 +52,7 @@ describe('DbLoadSurveyById Test', () => {
 
     const response = await sut.loadById('anyid');
 
-    expect(response).toEqual(makeFakeSurvey());
+    expect(response).toEqual(mockSurveyModel());
   });
 
   it('should throw if LoadSurveyByIdRepository throws', async () => {
@@ -82,7 +60,7 @@ describe('DbLoadSurveyById Test', () => {
 
     jest
       .spyOn(loadSurveyByIdRepositoryStub, 'loadById')
-      .mockReturnValueOnce(Promise.reject(new Error()));
+      .mockImplementationOnce(throwError);
 
     await expect(sut.loadById('anyid')).rejects.toThrow();
   });

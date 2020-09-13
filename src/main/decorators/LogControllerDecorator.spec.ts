@@ -5,22 +5,13 @@ import {
 } from '@/presentation/protocols';
 import { serverError } from '@/presentation/helpers/http/httpHelper';
 import { LogErrorRepository } from '@/data/protocols/db/log/LogErrorRepository';
+import { mockLogErrorRepository } from '@/data/test';
 import { LogControllerDecorator } from './LogControllerDecorator';
 
 type SutType = {
   sut: LogControllerDecorator;
   controllerStub: Controller;
   logErrorRepositoryStub: LogErrorRepository;
-};
-
-const makeLogErrorRepository = (): LogErrorRepository => {
-  class LogErrorRepositoryStub implements LogErrorRepository {
-    async logError(): Promise<void> {
-      return Promise.resolve();
-    }
-  }
-
-  return new LogErrorRepositoryStub();
 };
 
 const makeController = (): Controller => {
@@ -40,7 +31,7 @@ const makeController = (): Controller => {
 
 const makeSut = (): SutType => {
   const controllerStub = makeController();
-  const logErrorRepositoryStub = makeLogErrorRepository();
+  const logErrorRepositoryStub = mockLogErrorRepository();
 
   const sut = new LogControllerDecorator(
     controllerStub,

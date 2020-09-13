@@ -4,46 +4,10 @@ import {
   serverError,
   noContent,
 } from '@/presentation/helpers/http/httpHelper';
-import { SurveyModel, LoadSurveys } from './LoadSurveysControllerProtocols';
+import { mockSurveysModels, throwError } from '@/domain/test';
+import { mockLoadSurveys } from '@/presentation/test';
+import { LoadSurveys } from './LoadSurveysControllerProtocols';
 import { LoadSurveysController } from './LoadSurveysController';
-
-const makeFakeSurveys = (): SurveyModel[] => [
-  {
-    id: 'anyid',
-    question: 'anyquestion',
-    date: new Date(),
-    answers: [
-      {
-        answer: 'anyanswer',
-      },
-    ],
-  },
-
-  {
-    id: 'otherid',
-    question: 'otherquestion',
-    date: new Date(),
-    answers: [
-      {
-        answer: 'answer',
-      },
-      {
-        answer: 'otheranswer',
-        image: 'otherimage',
-      },
-    ],
-  },
-];
-
-const makeLoadSurveys = (): LoadSurveys => {
-  class LoadSurveysStub implements LoadSurveys {
-    async load(): Promise<SurveyModel[]> {
-      return makeFakeSurveys();
-    }
-  }
-
-  return new LoadSurveysStub();
-};
 
 type SutType = {
   sut: LoadSurveysController;
@@ -51,7 +15,7 @@ type SutType = {
 };
 
 const makeSut = (): SutType => {
-  const loadSurveysStub = makeLoadSurveys();
+  const loadSurveysStub = mockLoadSurveys();
   const sut = new LoadSurveysController(loadSurveysStub);
 
   return { sut, loadSurveysStub };
@@ -81,7 +45,7 @@ describe('Load Survey Controller', () => {
 
     const response = await sut.handle();
 
-    expect(response).toEqual(ok(makeFakeSurveys()));
+    expect(response).toEqual(ok(mockSurveysModels()));
   });
 
   it('shoud return no content when LoadSurveys is empty', async () => {
@@ -99,9 +63,7 @@ describe('Load Survey Controller', () => {
   it('shoud return server error on failed', async () => {
     const { sut, loadSurveysStub } = makeSut();
 
-    jest
-      .spyOn(loadSurveysStub, 'load')
-      .mockReturnValueOnce(Promise.reject(new Error()));
+    jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(throwError);
 
     const response = await sut.handle();
 
