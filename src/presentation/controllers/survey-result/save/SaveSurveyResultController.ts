@@ -5,10 +5,14 @@ import {
   HttpRequest,
   HttpResponse,
   LoadSurveyById,
+  SaveSurveyResult,
 } from './SaveSurveyResultControllerProtocols';
 
 export class SaveSurveyController implements Controller {
-  constructor(private readonly loadSurveyById: LoadSurveyById) {}
+  constructor(
+    private readonly loadSurveyById: LoadSurveyById,
+    private readonly saveSurveyResult: SaveSurveyResult,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -24,6 +28,15 @@ export class SaveSurveyController implements Controller {
       if (!survey.answers.some(a => a.answer === answer)) {
         return forbidden(new InvalidParamError('answer'));
       }
+
+      const { accountId } = httpRequest;
+
+      await this.saveSurveyResult.save({
+        surveyId,
+        accountId,
+        answer,
+        date: new Date(),
+      });
 
       return null;
     } catch (err) {
