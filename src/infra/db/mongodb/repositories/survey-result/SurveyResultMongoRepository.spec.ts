@@ -1,6 +1,6 @@
 import { AccountModel } from '@/domain/models/Account';
 import { SurveyModel } from '@/domain/models/Survey';
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../../helpers/mongoHelper';
 import { SurveyResultMongoRepository } from './SurveyResultMongoRepository';
 
@@ -24,7 +24,7 @@ const makeSurvey = async (): Promise<SurveyModel> => {
 
   const [survey] = res.ops;
 
-  return survey;
+  return MongoHelper.map(survey);
 };
 
 const makeAccount = async (): Promise<AccountModel> => {
@@ -36,7 +36,7 @@ const makeAccount = async (): Promise<AccountModel> => {
 
   const [account] = res.ops;
 
-  return account;
+  return MongoHelper.map(account);
 };
 
 describe('SurveyResultMongoRepository Test', () => {
@@ -80,8 +80,10 @@ describe('SurveyResultMongoRepository Test', () => {
       });
 
       expect(response).toBeTruthy();
-      expect(response.id).toBeTruthy();
-      expect(response.answer).toBe(answer);
+      expect(response.surveyId).toEqual(survey.id);
+      expect(response.answers[0].answer).toEqual(answer);
+      expect(response.answers[0].count).toBe(1);
+      expect(response.answers[0].percent).toBe(100);
     });
 
     it('should update a survey result if exists', async () => {
@@ -95,14 +97,12 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const { id: accountId } = account;
 
-      const res = await surveyResultCollection.insertOne({
-        surveyId,
-        accountId,
+      await surveyResultCollection.insertOne({
+        surveyId: new ObjectId(surveyId),
+        accountId: new ObjectId(accountId),
         answer,
         date: new Date(),
       });
-
-      const [{ _id: id }] = res.ops;
 
       const sut = makeSut();
 
@@ -114,8 +114,10 @@ describe('SurveyResultMongoRepository Test', () => {
       });
 
       expect(response).toBeTruthy();
-      expect(response.id).toEqual(id);
-      expect(response.answer).toBe(otherAnswer);
+      expect(response.surveyId).toEqual(survey.id);
+      expect(response.answers[0].answer).toEqual(otherAnswer);
+      expect(response.answers[0].count).toBe(1);
+      expect(response.answers[0].percent).toBe(100);
     });
   });
 });
