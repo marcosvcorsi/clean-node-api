@@ -1,6 +1,6 @@
-import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/LoadSurveyResultRepository';
 import { mockLoadSurveyResultRepository } from '@/data/test';
 import { mockSurveyResultModel, throwError } from '@/domain/test';
+import { LoadSurveyResultRepository } from './DbLoadSurveyResultProtocols';
 import { DbLoadSurveyResult } from './DbLoadSurveyResult';
 
 type SutType = {
