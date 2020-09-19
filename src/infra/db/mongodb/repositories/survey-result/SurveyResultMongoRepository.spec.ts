@@ -73,20 +73,19 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const sut = makeSut();
 
-      const response = await sut.save({
+      await sut.save({
         surveyId,
         accountId,
         answer,
         date: new Date(),
       });
 
-      expect(response).toBeTruthy();
-      expect(response.surveyId).toEqual(survey.id);
-      expect(response.answers[0].answer).toEqual(answer);
-      expect(response.answers[0].count).toBe(1);
-      expect(response.answers[0].percent).toBe(100);
-      expect(response.answers[1].count).toBe(0);
-      expect(response.answers[1].percent).toBe(0);
+      const surveyResult = await surveyResultCollection.findOne({
+        surveyId,
+        accountId,
+      });
+
+      expect(surveyResult).toBeTruthy();
     });
 
     it('should update a survey result if exists', async () => {
@@ -109,20 +108,21 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const sut = makeSut();
 
-      const response = await sut.save({
+      await sut.save({
         surveyId,
         accountId,
         answer: otherAnswer,
         date: new Date(),
       });
 
-      expect(response).toBeTruthy();
-      expect(response.surveyId).toEqual(survey.id);
-      expect(response.answers[0].answer).toEqual(otherAnswer);
-      expect(response.answers[0].count).toBe(1);
-      expect(response.answers[0].percent).toBe(100);
-      expect(response.answers[1].count).toBe(0);
-      expect(response.answers[1].percent).toBe(0);
+      const results = await surveyResultCollection
+        .find({
+          surveyId,
+          accountId,
+        })
+        .toArray();
+
+      expect(results).toHaveLength(1);
     });
   });
 
