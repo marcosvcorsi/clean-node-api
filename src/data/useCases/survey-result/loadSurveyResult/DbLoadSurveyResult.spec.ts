@@ -48,4 +48,12 @@ describe('DbLoadSurveyResult UseCase', () => {
 
     await expect(sut.load('anyid')).rejects.toThrow();
   });
+
+  it('should return an survey result on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.load('anyid');
+
+    expect(response).toEqual(mockSurveyResultModel());
+  });
 });
