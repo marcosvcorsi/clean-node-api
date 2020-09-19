@@ -84,6 +84,8 @@ describe('SurveyResultMongoRepository Test', () => {
       expect(response.answers[0].answer).toEqual(answer);
       expect(response.answers[0].count).toBe(1);
       expect(response.answers[0].percent).toBe(100);
+      expect(response.answers[1].count).toBe(0);
+      expect(response.answers[1].percent).toBe(0);
     });
 
     it('should update a survey result if exists', async () => {
@@ -118,6 +120,8 @@ describe('SurveyResultMongoRepository Test', () => {
       expect(response.answers[0].answer).toEqual(otherAnswer);
       expect(response.answers[0].count).toBe(1);
       expect(response.answers[0].percent).toBe(100);
+      expect(response.answers[1].count).toBe(0);
+      expect(response.answers[1].percent).toBe(0);
     });
   });
 });
