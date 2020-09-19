@@ -1,5 +1,5 @@
 import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/LoadSurveyResultRepository';
-import { mockSurveyResultModel } from '@/domain/test';
+import { mockSurveyResultModel, throwError } from '@/domain/test';
 import { SurveyResultModel } from '../saveSurveyResult/DbSaveSurveyResultProtocols';
 import { DbLoadSurveyResult } from './DbLoadSurveyResult';
 
@@ -37,5 +37,15 @@ describe('DbLoadSurveyResult UseCase', () => {
     await sut.load('anyid');
 
     expect(repositorySpy).toHaveBeenCalledWith('anyid');
+  });
+
+  it('should throw if LoadSurveyResultRepository throws', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+      .mockImplementationOnce(throwError);
+
+    await expect(sut.load('anyid')).rejects.toThrow();
   });
 });
