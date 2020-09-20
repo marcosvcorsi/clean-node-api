@@ -1,6 +1,7 @@
 import { mockSurveyResultModel, throwError } from '@/domain/test';
-import { serverError } from '@/presentation/helpers/http/httpHelper';
+import { forbidden, serverError } from '@/presentation/helpers/http/httpHelper';
 import { mockLoadSurveyById } from '@/presentation/test';
+import { InvalidParamError } from '@/presentation/errors';
 import {
   HttpRequest,
   SurveyResultModel,
@@ -64,6 +65,16 @@ describe('LoadSurveyResultController', () => {
     const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  it('should return forbidden if LoadSurveyById returns null', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+
+    jest.spyOn(loadSurveyByIdStub, 'loadById').mockReturnValueOnce(null);
+
+    const response = await sut.handle(mockRequest());
+
+    expect(response).toEqual(forbidden(new InvalidParamError('surveyId')));
   });
 
   it('should call LoadSurveyResult with correct value', async () => {
