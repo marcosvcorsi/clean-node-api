@@ -1,10 +1,10 @@
 import { mockSurveyResultModel, throwError } from '@/domain/test';
-import { LoadSurveyResult } from '@/domain/useCases/survey-result/LoadSurveyResult';
 import { serverError } from '@/presentation/helpers/http/httpHelper';
 import {
   HttpRequest,
   SurveyResultModel,
-} from '../save/SaveSurveyResultControllerProtocols';
+  LoadSurveyResult,
+} from './LoadSurveyResultControllerProtocols';
 import { LoadSurveyResultController } from './LoadSurveyResultController';
 
 const mockLoadSurveyResult = (): LoadSurveyResult => {
