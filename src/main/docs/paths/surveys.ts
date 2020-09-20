@@ -29,4 +29,34 @@ export const surveysPath = {
       },
     },
   },
+
+  post: {
+    security: [
+      {
+        apiKeyAuth: [],
+      },
+    ],
+    tags: ['Enquetes'],
+    summary: 'Rota de criação de uma nova enquete',
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/schemas/createSurveyParams',
+          },
+        },
+      },
+    },
+    responses: {
+      204: {
+        description: 'Sucesso',
+      },
+      403: {
+        $ref: '#/components/forbidden',
+      },
+      500: {
+        $ref: '#/components/serverError',
+      },
+    },
+  },
 };
