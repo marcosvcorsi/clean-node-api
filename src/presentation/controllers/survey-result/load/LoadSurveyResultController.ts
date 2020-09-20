@@ -1,10 +1,10 @@
 import { serverError } from '@/presentation/helpers/http/httpHelper';
-import { LoadSurveyById } from '../save/SaveSurveyResultControllerProtocols';
 import {
   Controller,
   HttpRequest,
   HttpResponse,
   LoadSurveyResult,
+  LoadSurveyById,
 } from './LoadSurveyResultControllerProtocols';
 
 export class LoadSurveyResultController implements Controller {

@@ -5,9 +5,9 @@ import {
   HttpRequest,
   SurveyResultModel,
   LoadSurveyResult,
+  LoadSurveyById,
 } from './LoadSurveyResultControllerProtocols';
 import { LoadSurveyResultController } from './LoadSurveyResultController';
-import { LoadSurveyById } from '../save/SaveSurveyResultControllerProtocols';
 
 const mockLoadSurveyResult = (): LoadSurveyResult => {
   class LoadSurveyResultStub implements LoadSurveyResult {
