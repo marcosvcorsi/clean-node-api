@@ -27,10 +27,6 @@ export const MongoHelper = {
   },
 
   map<T>(data: any): T {
-    if (!data) {
-      return null;
-    }
-
     const { _id: id, ...collectionWithouId } = data;
 
     return {
