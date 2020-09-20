@@ -1,4 +1,5 @@
 import { LoadSurveyResult } from '@/domain/useCases/survey-result/LoadSurveyResult';
+import { serverError } from '@/presentation/helpers/http/httpHelper';
 import {
   Controller,
   HttpRequest,
@@ -9,10 +10,14 @@ export class LoadSurveyResultController implements Controller {
   constructor(private readonly loadSurveyResult: LoadSurveyResult) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { surveyId } = httpRequest.params;
+    try {
+      const { surveyId } = httpRequest.params;
 
-    await this.loadSurveyResult.load(surveyId);
+      await this.loadSurveyResult.load(surveyId);
 
-    return null;
+      return null;
+    } catch (error) {
+      return serverError(error);
+    }
   }
 }
