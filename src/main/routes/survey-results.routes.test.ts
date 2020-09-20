@@ -84,4 +84,30 @@ describe('Survey Result Routes', () => {
         .expect(200);
     });
   });
+
+  describe('GET /surveys/:surveyId/results', () => {
+    it('should not get survey result on put without authorization', async () => {
+      await request(app).get('/api/surveys/anyid/results').expect(403);
+    });
+
+    it('should load survey result on get with authorization', async () => {
+      const res = await surveyCollection.insertOne({
+        question: 'Question 1',
+        answers: [
+          { image: 'http://image.com.br/image.jpg', answer: 'Answer 1' },
+          { answer: 'Answer 2' },
+        ],
+        date: new Date(),
+      });
+
+      const [{ _id: surveyId }] = res.ops;
+
+      const accessToken = await makeAccessToken();
+
+      await request(app)
+        .get(`/api/surveys/${surveyId}/results`)
+        .set('Authorization', accessToken)
+        .expect(200);
+    });
+  });
 });

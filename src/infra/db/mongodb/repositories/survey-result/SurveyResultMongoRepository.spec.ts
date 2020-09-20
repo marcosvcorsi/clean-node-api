@@ -1,6 +1,6 @@
 import { AccountModel } from '@/domain/models/Account';
 import { SurveyModel } from '@/domain/models/Survey';
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../../helpers/mongoHelper';
 import { SurveyResultMongoRepository } from './SurveyResultMongoRepository';
 
@@ -17,14 +17,15 @@ const makeSurvey = async (): Promise<SurveyModel> => {
     question: 'anyquestion',
     answers: [
       { answer: 'anyanswer', image: 'anyimage' },
-      { answer: 'otheranswer' },
+      { answer: 'anyanswer2' },
+      { answer: 'anyanswer3' },
     ],
     date: new Date(),
   });
 
   const [survey] = res.ops;
 
-  return survey;
+  return MongoHelper.map(survey);
 };
 
 const makeAccount = async (): Promise<AccountModel> => {
@@ -36,7 +37,7 @@ const makeAccount = async (): Promise<AccountModel> => {
 
   const [account] = res.ops;
 
-  return account;
+  return MongoHelper.map(account);
 };
 
 describe('SurveyResultMongoRepository Test', () => {
@@ -72,16 +73,19 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const sut = makeSut();
 
-      const response = await sut.save({
+      await sut.save({
         surveyId,
         accountId,
         answer,
         date: new Date(),
       });
 
-      expect(response).toBeTruthy();
-      expect(response.id).toBeTruthy();
-      expect(response.answer).toBe(answer);
+      const surveyResult = await surveyResultCollection.findOne({
+        surveyId,
+        accountId,
+      });
+
+      expect(surveyResult).toBeTruthy();
     });
 
     it('should update a survey result if exists', async () => {
@@ -95,27 +99,87 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const { id: accountId } = account;
 
-      const res = await surveyResultCollection.insertOne({
-        surveyId,
-        accountId,
+      await surveyResultCollection.insertOne({
+        surveyId: new ObjectId(surveyId),
+        accountId: new ObjectId(accountId),
         answer,
         date: new Date(),
       });
 
-      const [{ _id: id }] = res.ops;
-
       const sut = makeSut();
 
-      const response = await sut.save({
+      await sut.save({
         surveyId,
         accountId,
         answer: otherAnswer,
         date: new Date(),
       });
 
+      const results = await surveyResultCollection
+        .find({
+          surveyId,
+          accountId,
+        })
+        .toArray();
+
+      expect(results).toHaveLength(1);
+    });
+  });
+
+  describe('loadBySurveyId()', () => {
+    it('should load survey result by survey id', async () => {
+      const survey = await makeSurvey();
+
+      const { id: surveyId, answers } = survey;
+
+      const [{ answer }, { answer: otherAnswer }] = answers;
+
+      const account = await makeAccount();
+
+      const { id: accountId } = account;
+
+      await surveyResultCollection.insertMany([
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer,
+          date: new Date(),
+        },
+
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer,
+          date: new Date(),
+        },
+
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: otherAnswer,
+          date: new Date(),
+        },
+
+        {
+          surveyId: new ObjectId(surveyId),
+          accountId: new ObjectId(accountId),
+          answer: otherAnswer,
+          date: new Date(),
+        },
+      ]);
+
+      const sut = makeSut();
+
+      const response = await sut.loadBySurveyId(surveyId);
+
       expect(response).toBeTruthy();
-      expect(response.id).toEqual(id);
-      expect(response.answer).toBe(otherAnswer);
+      expect(response.surveyId).toEqual(survey.id);
+      expect(response.answers[0].count).toBe(2);
+      expect(response.answers[0].percent).toBe(50);
+      expect(response.answers[1].count).toBe(2);
+      expect(response.answers[1].percent).toBe(50);
+      expect(response.answers[2].count).toBe(0);
+      expect(response.answers[2].percent).toBe(0);
     });
   });
 });
