@@ -1,5 +1,6 @@
-import { mockSurveyResultModel } from '@/domain/test';
+import { mockSurveyResultModel, throwError } from '@/domain/test';
 import { LoadSurveyResult } from '@/domain/useCases/survey-result/LoadSurveyResult';
+import { serverError } from '@/presentation/helpers/http/httpHelper';
 import {
   HttpRequest,
   SurveyResultModel,
@@ -43,5 +44,15 @@ describe('LoadSurveyResultController', () => {
     await sut.handle(mockRequest());
 
     expect(loadSpy).toHaveBeenCalledWith('anyid');
+  });
+
+  it('should return server error if LoadSurveyResult throws', async () => {
+    const { sut, loadSurveyResultStub } = makeSut();
+
+    jest.spyOn(loadSurveyResultStub, 'load').mockImplementationOnce(throwError);
+
+    const response = await sut.handle(mockRequest());
+
+    expect(response).toEqual(serverError(new Error()));
   });
 });
