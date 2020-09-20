@@ -181,5 +181,17 @@ describe('SurveyResultMongoRepository Test', () => {
       expect(response.answers[2].count).toBe(0);
       expect(response.answers[2].percent).toBe(0);
     });
+
+    it('should return null if survey result does not exists', async () => {
+      const survey = await makeSurvey();
+
+      const { id: surveyId } = survey;
+
+      const sut = makeSut();
+
+      const response = await sut.loadBySurveyId(surveyId);
+
+      expect(response).toBeNull();
+    });
   });
 });
