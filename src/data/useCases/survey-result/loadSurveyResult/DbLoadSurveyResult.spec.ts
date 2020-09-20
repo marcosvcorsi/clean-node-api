@@ -1,3 +1,4 @@
+import MockDate from 'mockdate';
 import {
   mockLoadSurveyByIdRepository,
   mockLoadSurveyResultRepository,
@@ -28,6 +29,14 @@ const makeSut = (): SutType => {
 };
 
 describe('DbLoadSurveyResult UseCase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should LoadSurveyResultRepository with correct values', async () => {
     const { sut, loadSurveyResultRepositoryStub } = makeSut();
 
@@ -93,5 +102,17 @@ describe('DbLoadSurveyResult UseCase', () => {
       .mockImplementationOnce(throwError);
 
     await expect(sut.load('anyid')).rejects.toThrow();
+  });
+
+  it('should return all answer if survey was not answered yet', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut();
+
+    jest
+      .spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+      .mockReturnValueOnce(Promise.resolve(null));
+
+    const response = await sut.load('anyid');
+
+    expect(response).toEqual(mockSurveyResultModel());
   });
 });
