@@ -84,4 +84,10 @@ describe('Survey Result Routes', () => {
         .expect(200);
     });
   });
+
+  describe('GET /surveys/:surveyId/results', () => {
+    it('should not get survey result on put without authorization', async () => {
+      await request(app).get('/api/surveys/anyid/results').expect(403);
+    });
+  });
 });
