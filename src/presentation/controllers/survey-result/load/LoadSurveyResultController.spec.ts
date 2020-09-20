@@ -5,25 +5,14 @@ import {
   ok,
   serverError,
 } from '@/presentation/helpers/http/httpHelper';
-import { mockLoadSurveyById } from '@/presentation/test';
+import { mockLoadSurveyById, mockLoadSurveyResult } from '@/presentation/test';
 import { InvalidParamError } from '@/presentation/errors';
 import {
   HttpRequest,
-  SurveyResultModel,
   LoadSurveyResult,
   LoadSurveyById,
 } from './LoadSurveyResultControllerProtocols';
 import { LoadSurveyResultController } from './LoadSurveyResultController';
-
-const mockLoadSurveyResult = (): LoadSurveyResult => {
-  class LoadSurveyResultStub implements LoadSurveyResult {
-    async load(): Promise<SurveyResultModel> {
-      return mockSurveyResultModel();
-    }
-  }
-
-  return new LoadSurveyResultStub();
-};
 
 const mockRequest = (): HttpRequest => ({
   params: {
