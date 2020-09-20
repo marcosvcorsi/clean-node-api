@@ -7,3 +7,6 @@ export * from './surveys';
 export * from './apiKeyAuth';
 export * from './signUpParams';
 export * from './createSurveyParams';
+export * from './saveSurveyResultParams';
+export * from './surveyResult';
+export * from './surveyResultAnswer';
