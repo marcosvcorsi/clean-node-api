@@ -1,5 +1,10 @@
+import MockDate from 'mockdate';
 import { mockSurveyResultModel, throwError } from '@/domain/test';
-import { forbidden, serverError } from '@/presentation/helpers/http/httpHelper';
+import {
+  forbidden,
+  ok,
+  serverError,
+} from '@/presentation/helpers/http/httpHelper';
 import { mockLoadSurveyById } from '@/presentation/test';
 import { InvalidParamError } from '@/presentation/errors';
 import {
@@ -45,6 +50,14 @@ const makeSut = (): SutType => {
 };
 
 describe('LoadSurveyResultController', () => {
+  beforeAll(() => {
+    MockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    MockDate.reset();
+  });
+
   it('should call LoadSurveyById with correct value', async () => {
     const { sut, loadSurveyByIdStub } = makeSut();
 
@@ -95,5 +108,13 @@ describe('LoadSurveyResultController', () => {
     const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  it('should return survey on success', async () => {
+    const { sut } = makeSut();
+
+    const response = await sut.handle(mockRequest());
+
+    expect(response).toEqual(ok(mockSurveyResultModel()));
   });
 });
