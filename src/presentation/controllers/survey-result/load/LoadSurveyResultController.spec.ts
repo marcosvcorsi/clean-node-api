@@ -1,11 +1,13 @@
 import { mockSurveyResultModel, throwError } from '@/domain/test';
 import { serverError } from '@/presentation/helpers/http/httpHelper';
+import { mockLoadSurveyById } from '@/presentation/test';
 import {
   HttpRequest,
   SurveyResultModel,
   LoadSurveyResult,
 } from './LoadSurveyResultControllerProtocols';
 import { LoadSurveyResultController } from './LoadSurveyResultController';
+import { LoadSurveyById } from '../save/SaveSurveyResultControllerProtocols';
 
 const mockLoadSurveyResult = (): LoadSurveyResult => {
   class LoadSurveyResultStub implements LoadSurveyResult {
@@ -25,17 +27,33 @@ const mockRequest = (): HttpRequest => ({
 
 type SutType = {
   sut: LoadSurveyResultController;
+  loadSurveyByIdStub: LoadSurveyById;
   loadSurveyResultStub: LoadSurveyResult;
 };
 
 const makeSut = (): SutType => {
   const loadSurveyResultStub = mockLoadSurveyResult();
-  const sut = new LoadSurveyResultController(loadSurveyResultStub);
+  const loadSurveyByIdStub = mockLoadSurveyById();
 
-  return { sut, loadSurveyResultStub };
+  const sut = new LoadSurveyResultController(
+    loadSurveyByIdStub,
+    loadSurveyResultStub,
+  );
+
+  return { sut, loadSurveyByIdStub, loadSurveyResultStub };
 };
 
 describe('LoadSurveyResultController', () => {
+  it('should call LoadSurveyById with correct value', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut();
+
+    const loadSpy = jest.spyOn(loadSurveyByIdStub, 'loadById');
+
+    await sut.handle(mockRequest());
+
+    expect(loadSpy).toHaveBeenCalledWith('anyid');
+  });
+
   it('should call LoadSurveyResult with correct value', async () => {
     const { sut, loadSurveyResultStub } = makeSut();
 
