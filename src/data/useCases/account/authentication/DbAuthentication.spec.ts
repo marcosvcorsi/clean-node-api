@@ -71,9 +71,9 @@ describe('DbAuthentication UseCase', () => {
       .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
       .mockReturnValueOnce(null);
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const model = await sut.auth(mockAuthentication());
 
-    expect(accessToken).toBeNull();
+    expect(model).toBeNull();
   });
 
   it('should call HashComparer with correct values', async () => {
@@ -101,9 +101,9 @@ describe('DbAuthentication UseCase', () => {
       .spyOn(hashComparerStub, 'compare')
       .mockReturnValueOnce(Promise.resolve(false));
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const model = await sut.auth(mockAuthentication());
 
-    expect(accessToken).toBeNull();
+    expect(model).toBeNull();
   });
 
   it('should call Encrypter with correct id', async () => {
@@ -124,12 +124,13 @@ describe('DbAuthentication UseCase', () => {
     await expect(sut.auth(mockAuthentication())).rejects.toThrow();
   });
 
-  it('should return token with correct values', async () => {
+  it('should return an authentication model with correct values', async () => {
     const { sut } = makeSut();
 
-    const accessToken = await sut.auth(mockAuthentication());
+    const { accessToken, name } = await sut.auth(mockAuthentication());
 
     expect(accessToken).toBe('anyid_token');
+    expect(name).toBe('anyname');
   });
 
   it('should call UpdateAccessTokenRepository with correct values', async () => {

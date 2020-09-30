@@ -1,3 +1,4 @@
+import { AuthenticationModel } from '@/domain/models/Authentication';
 import { mockAccountModel } from '@/domain/test';
 import { Authentication } from '../controllers/account/login/LoginControllerProtocols';
 
@@ -9,8 +10,8 @@ import { LoadAccountByToken } from '../middlewares/AuthMiddlewareProtocols';
 
 export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(): Promise<string> {
-      return Promise.resolve('anytoken');
+    async auth(): Promise<AuthenticationModel> {
+      return Promise.resolve({ accessToken: 'anytoken', name: 'anyname' });
     }
   }
 

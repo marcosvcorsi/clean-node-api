@@ -100,7 +100,9 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
 
-    expect(httpResponse).toEqual(created({ accessToken: 'anytoken' }));
+    expect(httpResponse).toEqual(
+      created({ accessToken: 'anytoken', name: 'anyname' }),
+    );
   });
 
   it('should throw an error if createAccount returns null', async () => {
