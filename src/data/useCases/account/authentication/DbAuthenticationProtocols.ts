@@ -1,3 +1,4 @@
+export * from '@/domain/models/Authentication';
 export * from '@/domain/models/Account';
 export * from '@/domain/useCases/account/Authentication';
 export * from '../../../protocols/db/account/LoadAccountByEmailRepository';
