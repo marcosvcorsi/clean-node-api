@@ -21,6 +21,10 @@ const makeSut = (): SutType => {
   return { sut, loadSurveysStub };
 };
 
+const mockRequest = () => ({
+  accountId: 'anyid',
+});
+
 describe('Load Survey Controller', () => {
   beforeAll(() => {
     MockDate.set(new Date());
@@ -30,20 +34,22 @@ describe('Load Survey Controller', () => {
     MockDate.reset();
   });
 
-  it('should call LoadSurvey', async () => {
+  it('should call LoadSurvey with correct value', async () => {
     const { sut, loadSurveysStub } = makeSut();
 
     const loadSpy = jest.spyOn(loadSurveysStub, 'load');
 
-    await sut.handle();
+    const request = mockRequest();
 
-    expect(loadSpy).toHaveBeenCalled();
+    await sut.handle(request);
+
+    expect(loadSpy).toHaveBeenCalledWith('anyid');
   });
 
   it('shoud return ok on sucess', async () => {
     const { sut } = makeSut();
 
-    const response = await sut.handle();
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(ok(mockSurveysModels()));
   });
@@ -55,7 +61,7 @@ describe('Load Survey Controller', () => {
       .spyOn(loadSurveysStub, 'load')
       .mockReturnValueOnce(Promise.resolve([]));
 
-    const response = await sut.handle();
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(noContent());
   });
@@ -65,7 +71,7 @@ describe('Load Survey Controller', () => {
 
     jest.spyOn(loadSurveysStub, 'load').mockImplementationOnce(throwError);
 
-    const response = await sut.handle();
+    const response = await sut.handle(mockRequest());
 
     expect(response).toEqual(serverError(new Error()));
   });

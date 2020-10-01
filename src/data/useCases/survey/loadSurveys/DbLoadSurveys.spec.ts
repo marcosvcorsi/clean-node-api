@@ -30,15 +30,17 @@ describe('DbLoadSurveys', () => {
 
     const repositorySpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll');
 
-    await sut.load();
+    const accountId = 'anyid';
 
-    expect(repositorySpy).toHaveBeenCalled();
+    await sut.load(accountId);
+
+    expect(repositorySpy).toHaveBeenCalledWith(accountId);
   });
 
   it('shoud return a list surveys on success', async () => {
     const { sut } = makeSut();
 
-    const response = await sut.load();
+    const response = await sut.load('anyid');
 
     expect(response).toEqual(mockSurveysModels());
   });
@@ -50,6 +52,6 @@ describe('DbLoadSurveys', () => {
       .spyOn(loadSurveysRepositoryStub, 'loadAll')
       .mockImplementationOnce(throwError);
 
-    await expect(sut.load()).rejects.toThrow();
+    await expect(sut.load('anyid')).rejects.toThrow();
   });
 });
