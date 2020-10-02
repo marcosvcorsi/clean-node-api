@@ -86,7 +86,10 @@ describe('DbSaveSurveyResult Test', () => {
 
     await sut.save(fakeSurveyResult);
 
-    expect(repositorySpy).toHaveBeenCalledWith(fakeSurveyResult.surveyId);
+    expect(repositorySpy).toHaveBeenCalledWith(
+      fakeSurveyResult.surveyId,
+      fakeSurveyResult.accountId,
+    );
   });
 
   it('should throw if LoadSurveyResultRepository throws', async () => {

@@ -132,9 +132,11 @@ describe('SurveyResultMongoRepository Test', () => {
 
       const { id: surveyId, answers } = survey;
 
-      const [{ answer }, { answer: otherAnswer }] = answers;
+      const [{ answer }] = answers;
 
       const account = await makeAccount();
+
+      const otherAccount = await makeAccount();
 
       const { id: accountId } = account;
 
@@ -148,48 +150,37 @@ describe('SurveyResultMongoRepository Test', () => {
 
         {
           surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
+          accountId: new ObjectId(otherAccount.id),
           answer,
-          date: new Date(),
-        },
-
-        {
-          surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
-          answer: otherAnswer,
-          date: new Date(),
-        },
-
-        {
-          surveyId: new ObjectId(surveyId),
-          accountId: new ObjectId(accountId),
-          answer: otherAnswer,
           date: new Date(),
         },
       ]);
 
       const sut = makeSut();
 
-      const response = await sut.loadBySurveyId(surveyId);
+      const response = await sut.loadBySurveyId(surveyId, accountId);
 
       expect(response).toBeTruthy();
       expect(response.surveyId).toEqual(survey.id);
+
       expect(response.answers[0].count).toBe(2);
-      expect(response.answers[0].percent).toBe(50);
-      expect(response.answers[1].count).toBe(2);
-      expect(response.answers[1].percent).toBe(50);
-      expect(response.answers[2].count).toBe(0);
-      expect(response.answers[2].percent).toBe(0);
+      expect(response.answers[0].percent).toBe(100);
+      expect(response.answers[0].isCurrentAccountAnswer).toBe(true);
+
+      expect(response.answers[1].count).toBe(0);
+      expect(response.answers[1].percent).toBe(0);
+      expect(response.answers[1].isCurrentAccountAnswer).toBe(false);
     });
 
     it('should return null if survey result does not exists', async () => {
       const survey = await makeSurvey();
+      const account = await makeAccount();
 
       const { id: surveyId } = survey;
 
       const sut = makeSut();
 
-      const response = await sut.loadBySurveyId(surveyId);
+      const response = await sut.loadBySurveyId(surveyId, account.id);
 
       expect(response).toBeNull();
     });
